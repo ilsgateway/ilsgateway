@@ -6,14 +6,32 @@ RapidHttpBacked
 RapidHttpBacked is a basic extension to Django's built-in WSGI server
 simplified to run as a backend for RapidSMS.
 
-Implementation
+Configuration
 --------------
 
-To create a new backend, simply extend rapidsms.backends.http.RapidHttpBacked
+
+To use the http backend, one needs to append 'http' to the list of 
+available backends, like so:
+
+    "my_http_backend" : {"ENGINE":  "rapidsms.backends.http", 
+                "port": 8888,
+                "gateway_url": "http://www.smsgateway.com",
+                "params_outgoing": "user=my_username&password=my_password&id=%(phone_number)s&text=%(message)s",
+                "params_incoming": "id=%(phone_number)s&text=%(message)s"
+        }
+
+'params_outgoing' must have %(message)s and %(phone_number)s, which will be substitute for the message.text and message.connection.identity respectively.
+
+
+Extension
+--------------
+
+To further customize the behaviour of httpbackend, simply extend rapidsms.backends.http.RapidHttpBacked
 and implement handle_request. For example::
 
     import datetime
-
+	import twilio
+    
     from django.http import HttpResponse
     from rapidsms.backends.http import RapidHttpBacked
 
@@ -40,3 +58,24 @@ and implement handle_request. For example::
                 return None
             now = datetime.datetime.utcnow()
             return super(MyBackend, self).message(sender, sms, now)
+	
+	    def send(self, message):
+	        self.info('Sending message: %s' % message)
+	        data = {
+	            'From': self.config['number'],
+	            'To': message.connection.identity,
+	            'Body': message.text,
+	        }
+	        if 'callback' in self.config:
+	            data['StatusCallback'] = self.config['callback']
+	        self.debug('POST data: %s' % pprint.pformat(data))
+	        url = '/%s/Accounts/%s/SMS/Messages' % (self.api_version,
+	                                                self.config['account_sid'])
+	        try:
+	            response = self.account.request(url, 'POST', data)
+	        except Exception, e:
+	            self.exception(e.read())
+	            response = None
+	        if response:
+	            self.info('SENT')
+	            self.debug(response)
