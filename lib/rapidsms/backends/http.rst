@@ -8,8 +8,6 @@ simplified to run as a backend for RapidSMS.
 
 Configuration
 --------------
-
-
 To use the http backend, one needs to append 'http' to the list of 
 available backends, like so:
 
@@ -20,8 +18,12 @@ available backends, like so:
                 "params_incoming": "id=%(phone_number)s&text=%(message)s"
         }
 
-'params_outgoing' must have %(message)s and %(phone_number)s, which will be substitute for the message.text and message.connection.identity respectively.
+'params_outgoing' must have %(message)s and %(phone_number)s as values in the key-value pairs. 
+These will be substituted for the message.text and message.connection.identity respectively.
 
+'params_incoming' must have %(message)s and %(phone_number)s as values in the key-value pairs. 
+This format demonstrates how the http handler expects to receive those parameters from an external server
+via HTTP GET.
 
 Extension
 --------------
