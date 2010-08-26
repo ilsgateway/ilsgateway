@@ -100,7 +100,7 @@ class RapidHttpBacked(BackendBase):
         sms = request.GET.get(self.incoming_message_param, '')
         sender = request.GET.get(self.incoming_phone_number_param, '')
         if not sms or not sender:
-            error_msg = 'ERROR: Missing %(msg)s or %(phone_number)s. GET parameters received are: %(params)s' % \
+            error_msg = 'ERROR: Missing %(msg)s or %(phone_number)s. parameters received are: %(params)s' % \
                          { 'msg' : self.incoming_message_param, 
                            'phone_number': self.incoming_phone_number_param,
                            'params': unicode(request.GET)
@@ -122,11 +122,10 @@ class RapidHttpBacked(BackendBase):
         # you could add it to this context dictionary
         context = {'message':message.text,
                    'phone_number':message.connection.identity}
-        self.debug('GET data: %s' % (self.http_params_outgoing % context))
         url = "%s?%s" % (self.gateway_url, self.http_params_outgoing % context)
         try:
-            response = urllib2.urlopen(self.gateway_url, 
-                                      'GET')
+            self.debug('Sending: %s' % url)
+            response = urllib2.urlopen(url)
         except Exception, e:
             self.exception(e)
             return
