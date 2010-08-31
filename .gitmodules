@@ -1,3 +1,6 @@
 [submodule "lib/rapidsms/contrib"]
 	path = lib/rapidsms/contrib
 	url = git@github.com:dimagi/rapidsms-contrib-apps-dev.git
+[submodule "apps/ilsgateway"]
+	path = apps/ilsgateway
+	url = git://github.com/dimagi/rapidsms-ilsgateway-app.git
