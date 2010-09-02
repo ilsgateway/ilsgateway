@@ -70,7 +70,7 @@ RAPIDSMS_BASE_TABS = [
 TABS = RAPIDSMS_BASE_TABS + [
     ("rapidsms.contrib.registration.views.registration",    "Registration"),
     ("rapidsms.contrib.messaging.views.messaging",          "Messaging"),
-    #("rapidsms.contrib.locations.views.locations",          "Map"),
+    ("rapidsms.contrib.locations.views.locations",          "Map"),
     ("rapidsms.contrib.scheduler.views.index",              "Event Scheduler"),
     ("rapidsms.contrib.httptester.views.generate_identity", "Message Tester"),
 ]
