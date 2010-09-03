@@ -16,6 +16,12 @@ AJAX_PROXY_PORT = 8001
 INSTALLED_HANDLERS = None
 EXCLUDED_HANDLERS = ['what']
 
+PAGINATOR_OBJECTS_PER_PAGE = 12
+PAGINATOR_MAX_PAGE_LINKS = 5
+
+MAP_DEFAULT_LATITUDE  = 40.726111
+MAP_DEFAULT_LONGITUDE = -73.981389
+
 DATABASES = {
     'default': {
         'ENGINE':     'django.db.backends.postgresql_psycopg2',     # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.

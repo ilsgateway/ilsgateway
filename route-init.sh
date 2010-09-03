@@ -48,7 +48,7 @@ echo $RUN_AS
 echo $ROUTER_PID_FILE
 echo $DAEMON
 echo $DAEMON_OPTS
-    start-stop-daemon -d $APP_PATH -c $RUN_AS --start --background --pidfile $ROUTER_PID_FILE  --mak$
+    start-stop-daemon -d $APP_PATH -c $RUN_AS --start --background --pidfile $ROUTER_PID_FILE  --make-pidfile --exec $DAEMON -- runrouter $DAEMON_OPTS
     echo "Router Started"
 }
 
