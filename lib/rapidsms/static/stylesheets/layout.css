@@ -98,7 +98,7 @@ div.clear-hack {
             height: 65px;
             width: 245px;
             display: block;
-            background: url("../images/rapidsms-logo.png") no-repeat 0 50%;
+            #background: url("../images/rapidsms-logo.png") no-repeat 0 50%;
 
             /* float the RapidSMS logo, in case any app would like to
              * append anything to the light blue (empty) stripe */
@@ -106,8 +106,10 @@ div.clear-hack {
         }
 
             #branding h1 a span {
-                position: absolute;
-                left: -9999px;
+            	color: #fff;
+            	font-size: 2em;
+                #position: absolute;
+                #left: -9999px;
             }
 
     #tabs,

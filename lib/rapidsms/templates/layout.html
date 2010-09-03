@@ -34,8 +34,9 @@
 				<div id="branding">
 					<h1>
 						<a title="{% trans "Return to the Dashboard" %}" href="/">
-							<span>RapidSMS</span>
+							<span>ILSGateway</span>
 						</a>
+					<span style="float:right;margin:7px 90px 0 0;">Tanzania Ministry of Health<br /> and Social Welfare</span>
 					</h1>
 				</div>
 
@@ -48,7 +49,11 @@
 
 				{% get_tabs as tabs %}
 
-				<ul id="tabs">{% for tab in tabs %}
+				<ul id="tabs">
+					<li><a href="/">Dashboard</a></li>
+					<!-- <li><a href="/districts">Districts</a></li> -->
+					<li><a href="/facilities">Facilities</a></li>				
+					{% for tab in tabs %}
 					<li class="app-{{ tab.name }}{% if tab.is_active %} active{% endif %}">
 						<a href="{{ tab.url }}"><span>{{ tab.caption }}</span></a>
 					</li>{% endfor %}

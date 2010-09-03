@@ -3,8 +3,18 @@
 
 import os, tempfile
 
+PROJECT_NAME = "ILSGateway"
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+
+MESSAGE_TESTER_TIMEOUT  = 5
+MESSAGE_TESTER_INTERVAL = 0.2
+
+AJAX_PROXY_HOST = "localhost"
+AJAX_PROXY_PORT = 8001
+
+INSTALLED_HANDLERS = None
+EXCLUDED_HANDLERS = ['what']
 
 DATABASES = {
     'default': {
@@ -62,7 +72,7 @@ INSTALLED_APPS = RAPIDSMS_BASE_APPS + [
 
 # the tabs for RAPISMS_BASE_APPS.
 RAPIDSMS_BASE_TABS = [
-    ("rapidsms.views.dashboard", "Dashboard")
+    #("rapidsms.views.dashboard", "Dashboard")
 ]
 
 # REVEAL TABS BY APPENDING THEM TO THIS LIST
