@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # vim: ai ts=4 sts=4 et sw=4
+_ = lambda s: s
 
 import os, tempfile
 
@@ -21,6 +22,11 @@ PAGINATOR_MAX_PAGE_LINKS = 5
 
 MAP_DEFAULT_LATITUDE  = 40.726111
 MAP_DEFAULT_LONGITUDE = -73.981389
+
+LANGUAGES = (
+  ('sw', _('Swahili')),
+  ('en', _('English')),
+)
 
 DATABASES = {
     'default': {
@@ -106,7 +112,7 @@ INSTALLED_BACKENDS = {
     "message_tester": {
         "ENGINE": "rapidsms.backends.bucket"
     },
-    "my_http_backend" : {"ENGINE":  "rapidsms.backends.http", 
+    "my_http_backend" : {"ENGINE":  "rapidsms.backends.tropo", 
         "port": 8888,
         "gateway_url": "http://www.smsgateway.com",
         "params_outgoing": "user=my_username&password=my_password&id=%(phone_number)s&text=%(message)s",
