@@ -82,14 +82,9 @@ INSTALLED_APPS = RAPIDSMS_BASE_APPS + [
 ]
 
 
-# the tabs for RAPISMS_BASE_APPS.
-RAPIDSMS_BASE_TABS = [
-    #("rapidsms.views.dashboard", "Dashboard")
-]
-
 # REVEAL TABS BY APPENDING THEM TO THIS LIST
 # the tabs for RAPIDSMS_APPS.
-TABS = RAPIDSMS_BASE_TABS + [
+RAPIDSMS_TABS = [
     ("rapidsms.contrib.registration.views.registration",    "Registration"),
     ("rapidsms.contrib.messaging.views.messaging",          "Messaging"),
     ("rapidsms.contrib.locations.views.locations",          "Map"),

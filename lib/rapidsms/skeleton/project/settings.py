@@ -74,7 +74,6 @@ INSTALLED_APPS = [
     "rapidsms.contrib.messaging",
     "rapidsms.contrib.registration",
     "rapidsms.contrib.scheduler",
-    "rapidsms.contrib.search",
     "rapidsms.contrib.echo",
 ]
 
@@ -82,8 +81,7 @@ INSTALLED_APPS = [
 # this rapidsms-specific setting defines which views are linked by the
 # tabbed navigation. when adding an app to INSTALLED_APPS, you may wish
 # to add it here, also, to expose it in the rapidsms ui.
-TABS = [
-    ("rapidsms.views.dashboard",                            "Dashboard"),
+RAPIDSMS_TABS = [
     ("rapidsms.contrib.messagelog.views.message_log",       "Message Log"),
     ("rapidsms.contrib.registration.views.registration",    "Registration"),
     ("rapidsms.contrib.messaging.views.messaging",          "Messaging"),
@@ -172,9 +170,11 @@ ROOT_URLCONF = "rapidsms.djangoproject.urls"
 # since we might hit the database from any thread during testing, the
 # in-memory sqlite database isn't sufficient. it spawns a separate
 # virtual database for each thread, and syncdb is only called for the
-# first. this leads to confusing "no such table" errors. so i'm
-# defaulting to a temporary file instead.
-import os, tempfile
-TEST_DATABASE_NAME = os.path.join(
-    tempfile.gettempdir(),
-    "rapidsms.test.sqlite3")
+# first. this leads to confusing "no such table" errors. We create
+# a named temporary instance instead.
+import os, tempfile, sys
+if 'test' in sys.argv:
+    for db_name in DATABASES:
+        DATABASES[db_name]['TEST_NAME'] = os.path.join(
+            tempfile.gettempdir(), 
+            "%s.rapidsms.test.sqlite3" % db_name)

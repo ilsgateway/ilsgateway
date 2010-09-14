@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="RapidSMS",
-    version="0.9.4a",
+    version="0.9.5a",
     license="BSD",
 
     install_requires = [
@@ -20,7 +20,7 @@ setup(
     scripts = ["bin/rapidsms-admin.py"],
 
     package_dir = {"": "lib"},
-    packages = find_packages("lib"),
+    packages = find_packages("lib",exclude=['*.pyc']),
     include_package_data = True,
 
     author="RapidSMS development community",

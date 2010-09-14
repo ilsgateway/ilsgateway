@@ -1,4 +1,10 @@
-#Wed Sep 01 07:09:12 PDT 2010
+#Mon Sep 13 17:20:25 PDT 2010
 eclipse.preferences.version=1
 encoding//apps/ilsgateway/admin.py=utf-8
 encoding//apps/ilsgateway/models.py=utf-8
+encoding//apps/ilsgateway/utils/csv2json.py=utf-8
+encoding//lib/rapidsms/backends/http.py=utf-8
+encoding//lib/rapidsms/backends/tropo.py=utf-8
+encoding//lib/rapidsms/contrib/default/locale/fr/LC_MESSAGES/django.po=UTF-8
+encoding//lib/rapidsms/contrib/scheduler/views.py=utf-8
+encoding//lib/rapidsms/router.py=utf-8
