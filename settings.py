@@ -2,7 +2,13 @@
 # vim: ai ts=4 sts=4 et sw=4
 _ = lambda s: s
 
-import os, tempfile
+import os, tempfile, sys
+
+project_root = os.path.abspath(os.path.dirname(__file__))
+for dir in ["lib", "apps"]:
+    path = os.path.join(project_root, dir)
+    sys.path.insert(0, path)
+sys.path.insert(0, project_root)
 
 PROJECT_NAME = "ILSGateway"
 DEBUG = True
