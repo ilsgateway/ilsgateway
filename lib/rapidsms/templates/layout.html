@@ -52,7 +52,7 @@
 				<ul id="tabs">
 					<li><a href="/">Dashboard</a></li>
 					<!-- <li><a href="/districts">Districts</a></li> -->
-					<li><a href="/facilities">Facilities</a></li>				
+					<li><a href="/facilities/inventory/">Facilities</a></li>				
 					{% for tab in tabs %}
 					<li class="app-{{ tab.name }}{% if tab.is_active %} active{% endif %}">
 						<a href="{{ tab.url }}"><span>{{ tab.caption }}</span></a>
