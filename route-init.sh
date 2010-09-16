@@ -33,7 +33,7 @@ WHERE_AM_I=`dirname $ME`
 
 ############### EDIT ME ##################
 NAME="ilsgateway-app" # change to your project name
-DAEMON=$WHERE_AM_I/rapidsms
+DAEMON=$WHERE_AM_I/manage.py
 DAEMON_OPTS=""
 RUN_AS=root
 APP_PATH=$WHERE_AM_I
