@@ -23,12 +23,17 @@ PAGINATOR_MAX_PAGE_LINKS = 5
 MAP_DEFAULT_LATITUDE  = 40.726111
 MAP_DEFAULT_LONGITUDE = -73.981389
 
-#LANGUAGES = (
-#  ('sw', _('Swahili')),
-#  ('en', _('English')),
-#)
-
-LANGUAGE_CODE = 'es'
+MIDDLEWARE_CLASSES = (
+   'django.contrib.sessions.middleware.SessionMiddleware',
+   'django.middleware.locale.LocaleMiddleware',
+   'django.contrib.auth.middleware.AuthenticationMiddleware',    
+   'django.middleware.common.CommonMiddleware',
+)
+LANGUAGES = (
+  ('sw', _('Swahili')),
+  ('en', _('English')),
+  ('es', _('Spanish')),
+)
 
 USE_L10N = True
 USE_I18N = True
