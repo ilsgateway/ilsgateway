@@ -10,6 +10,8 @@ for dir in ["lib", "apps"]:
     sys.path.insert(0, path)
 sys.path.insert(0, project_root)
 
+DEFAULT_RESPONSE = "Sorry, %(project_name)s could not understand your message."
+
 PROJECT_NAME = "ILSGateway"
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -125,8 +127,9 @@ INSTALLED_BACKENDS = {
     "message_tester": {
         "ENGINE": "rapidsms.backends.bucket"
     },
-    "my_http_backend" : {"ENGINE":  "rapidsms.backends.tropo", 
+    "my_http_backend" : {"ENGINE":  "rapidsms.backends.tropobackend", 
         "port": 8888,
+	"host": "0.0.0.0",
         "gateway_url": "http://www.smsgateway.com",
         "params_outgoing": "user=my_username&password=my_password&id=%(phone_number)s&text=%(message)s",
         "params_incoming": "id=%(phone_number)s&text=%(message)s"
