@@ -3,7 +3,8 @@
 
 
 from rapidsms.contrib.handlers.handlers.keyword import KeywordHandler
-from ilsgateway.models import ContactDetail, ServiceDeliveryPoint
+from ilsgateway.models import ContactDetail, ServiceDeliveryPoint, ContactRole
+import string
 
 
 class RegisterHandler(KeywordHandler):
@@ -26,20 +27,32 @@ class RegisterHandler(KeywordHandler):
     keyword = "register|reg|join"
 
     def help(self):
-        self.respond("To register, send JOIN <NAME>")
+        self.respond("To register, send JOIN <NAME> <MSD CODE>")
 
     def handle(self, text):
-        name, service_delivery_point_name = text.split()
-
-        try:
-            sdp = ServiceDeliveryPoint.objects.filter(name__iexact=service_delivery_point_name)[0:1].get()
-        except ServiceDeliveryPoint.DoesNotExist:
-            self.respond("Sorry, can't find the location %s" % service_delivery_point_name)
-            return
+        words = text.split()
+        name = words.pop(0)
+        msd_code = string.join(words, '') 
         
-        contact = ContactDetail.objects.create(name=name, service_delivery_point=sdp)
+        if not msd_code:
+            self.respond("To register, send JOIN <NAME> <MSD CODE>.  You didn't include an MSD CODE.")
+            return
+        else:            
+            try:
+                sdp = ServiceDeliveryPoint.objects.filter(msd_code__iexact=msd_code)[0:1].get()
+            except ServiceDeliveryPoint.DoesNotExist:
+                self.respond("Sorry, can't find the location with MSD CODE %s" % msd_code)
+                return
+        
+        #Default to Facility in-charge for now
+        role = ContactRole.objects.filter(name="Facility in-charge")[0:1].get()
+        is_primary = True
+        if ContactDetail.objects.filter(primary=True, service_delivery_point=sdp):
+            is_primary = False
+            
+        contact = ContactDetail.objects.create(name=name, service_delivery_point=sdp, role=role, primary=is_primary)
         
         self.msg.connection.contact = contact
         self.msg.connection.save()
 
-        self.respond("Thank you for registering at %s, %s" % (service_delivery_point_name, contact.name))
+        self.respond("Thank you for registering at %s, %s" % (msd_code, contact.name))
