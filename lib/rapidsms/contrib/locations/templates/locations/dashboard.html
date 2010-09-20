@@ -70,21 +70,3 @@
 	</div>
 </div>
 {% endblock %}
-
-{% block right %}{% for type in location_types %}
-<div class="module forms collapsed">
-	<h2>Add a {{ type.singular|title }}</h2>
-	<form action="" method="post">
-		{% render_form type.form %}
-		{% csrf_token %}
-
-		<div class="submit">
-			<input type="submit" name="submit" value="Save" />
-			<input type="hidden" name="type" value="{{ type.name }}" />{% if type.form.instance %}
-			<input type="hidden" name="id" value="{{ type.form.instance.uid }}" />{% endif %}
-			<input type="hidden" name="parent_type" value="{{ location.content_type }}" />
-			<input type="hidden" name="parent_id" value="{{ location.id }}" />
-		</div>
-	</form>
-</div>{% endfor %}
-{% endblock %}

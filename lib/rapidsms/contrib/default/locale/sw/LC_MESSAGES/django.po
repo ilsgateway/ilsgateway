@@ -10,6 +10,3 @@ msgstr "Samahani, %(project_name)s haikuelewa ujumbe wako"
 
 msgid "hello"
 msgstr "jambo"
-
-msgid "DATETIME_FORMAT"
-msgstr "j N Y P"
