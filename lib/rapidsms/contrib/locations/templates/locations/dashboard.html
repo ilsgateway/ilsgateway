@@ -15,6 +15,11 @@
 <script src="{{ MEDIA_URL }}locations/javascripts/map.js" type="text/javascript"></script>
 {% endblock %}
 
+{% block content %}
+	<h3>{% for title, href in breadcrumbs %}{% if not forloop.first %} / {% endif %}<a href="{{href}}">{{ title }}</a>{% endfor %}</h3>
+{{ block.super }}
+{% endblock %}
+
 {% block left %}{% if no_location_types %}
 <div class="module tables">
 	<table>
@@ -28,7 +33,7 @@
 			</tr>
 		</tbody>
 	</table>
-</div>{% else %}{% for type in location_types %}
+</div>{% else %}{% for type in location_types %}{% if not type.is_empty %}
 <div class="module tables{% if type.is_empty %} collapsed{% endif %}">
 	<h2>{{ type.plural|title }}</h2>
 	<table class="locations">
@@ -37,7 +42,7 @@
 
 		<tbody>{% for location in type.table.rows %}
 			<tr>
-				<th scope="row"><a href="{% url locations location.uid %}">{{ location }}</a></th>
+				<th scope="row">{% if location.content_type == 'facilitylocation' %}<a href="/facilities/{{ location.service_delivery_point.id }}/months_of_stock/">{% else %}<a href="{% url locations location.uid %}">{% endif %}{{ location }}</a></th>
 			</tr>{% empty %}
 			<tr class="no-data">
 				<td colspan="{{ num_columns }}">
@@ -50,7 +55,7 @@
 
 		{% table_foot type.table %}
 	</table>
-</div>{% endfor %}{% endif %}
+</div>{% endif %}{% endfor %}{% endif %}
 {% endblock %}
 
 {% block middle %}
@@ -60,8 +65,17 @@
 		<div class="container"></div>
 
 		<ul class="labels">{% for type in location_types %}{% for location in type.locations %}
-			<li lat="{{ location.point.latitude }}" lng="{{ location.point.longitude }}">
-				{{ location.as_html }}
+			<li lat="{{ location.point.latitude }}" 
+				lng="{{ location.point.longitude }}" 
+				name="{{ location.name }}" 
+				inj="{{ location.service_delivery_point.stock_on_hand_inj }}"
+				coc="{{ location.service_delivery_point.stock_on_hand_coc }}"
+				pop="{{ location.service_delivery_point.stock_on_hand_pop }}"
+				iud="{{ location.service_delivery_point.stock_on_hand_iud }}"
+				imp="{{ location.service_delivery_point.stock_on_hand_imp }}"
+				con="{{ location.service_delivery_point.stock_on_hand_con }}"
+				last_reported="{{ location.service_delivery_point.stock_on_hand_last_reported }}">
+				{{ location.InfoWindowHTML }}
 			</li>{% endfor %}{% endfor %}
 		</ul>
 	</div>

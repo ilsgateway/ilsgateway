@@ -9,5 +9,5 @@ class LocationTable(Table):
     name = Column()
     #slug = Column()
 
-    #class Meta:
-    #    order_by = 'name'
+    class Meta:
+        order_by = 'service_delivery_point__name'

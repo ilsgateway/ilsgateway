@@ -15,7 +15,7 @@ from .tables import *
 from . import utils
 
 
-def _breadcrumbs(location=None, first_caption="Tanzania"):
+def _breadcrumbs(location=None, first_caption="TANZANIA"):
     """
     Return the breadcrumb trail leading to ``location``. To avoid the
     trail being empty when browsing the entire world, the caption of the
@@ -78,8 +78,7 @@ class LocationTypeStub(object):
                 parent_id=self._loc.pk)
 
         else:
-            return self._type.objects.filter(
-                parent_type=None)
+            return self._type.objects.filter()
 
     def is_empty(self):
         return self.locations().count() == 0
@@ -126,7 +125,7 @@ def locations(req, location_uid=None):
     types = [
         LocationTypeStub(type, req, view_location)
         for type in Location.subclasses()]
-
+    types.reverse()
     return render_to_response(
         "locations/dashboard.html", {
             "breadcrumbs": _breadcrumbs(view_location),
