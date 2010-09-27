@@ -6,27 +6,29 @@ from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
-from rapidsms.forms import ContactForm
-from rapidsms.models import Contact
-from .tables import ContactTable
+from ilsgateway.forms import ContactDetailForm
+from ilsgateway.models import ContactDetail, ServiceDeliveryPoint
+from ilsgateway.tables import ContactDetailTable
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def registration(req, pk=None):
-    contact = None
+    my_sdp = ServiceDeliveryPoint.objects.filter(contactdetail__user__id=req.user.id)[0:1].get()
+    contact_detail = None
 
     if pk is not None:
-        contact = get_object_or_404(
-            Contact, pk=pk)
+        contact_detail = get_object_or_404(
+            ContactDetail, pk=pk)
 
     if req.method == "POST":
-        if req.POST["submit"] == "Delete Contact":
-            contact.delete()
+        if req.POST["submit"] == "Delete Contact Detail":
+            contact_detail.delete()
             return HttpResponseRedirect(
                 reverse(registration))
 
         else:
-            form = ContactForm(
-                instance=contact,
+            form = ContactDetailForm(
+                instance=contact_detail,
                 data=req.POST)
 
             if form.is_valid():
@@ -35,13 +37,14 @@ def registration(req, pk=None):
                     reverse(registration))
 
     else:
-        form = ContactForm(
-            instance=contact)
+        form = ContactDetailForm(
+            instance=contact_detail, 
+            service_delivery_point=my_sdp)
 
     return render_to_response(
         "registration/dashboard.html", {
-            "contacts_table": ContactTable(Contact.objects.all(), request=req),
-            "contact_form": form,
-            "contact": contact
+            "contact_detail_table": ContactDetailTable(ContactDetail.objects.filter(service_delivery_point__parent_service_delivery_point=my_sdp), request=req),
+            "contact_detail_form": form,
+            "contact_detail": contact_detail
         }, context_instance=RequestContext(req)
     )

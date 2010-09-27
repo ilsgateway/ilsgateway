@@ -42,7 +42,7 @@
 
 		<tbody>{% for location in type.table.rows %}
 			<tr>
-				<th scope="row">{% if location.content_type == 'facilitylocation' %}<a href="/facilities/{{ location.service_delivery_point.id }}/months_of_stock/">{% else %}<a href="{% url locations location.uid %}">{% endif %}{{ location }}</a></th>
+				<th scope="row"><a href="{% url locations location.uid %}">{{ location }}</a></th>
 			</tr>{% empty %}
 			<tr class="no-data">
 				<td colspan="{{ num_columns }}">
@@ -65,7 +65,8 @@
 		<div class="container"></div>
 
 		<ul class="labels">{% for type in location_types %}{% for location in type.locations %}
-			<li lat="{{ location.point.latitude }}" 
+			<li facility_link="/facilities/{{ location.service_delivery_point.id }}/months_of_stock/"
+				lat="{{ location.point.latitude }}" 
 				lng="{{ location.point.longitude }}" 
 				name="{{ location.name }}" 
 				inj="{{ location.service_delivery_point.stock_on_hand_inj }}"
@@ -74,6 +75,12 @@
 				iud="{{ location.service_delivery_point.stock_on_hand_iud }}"
 				imp="{{ location.service_delivery_point.stock_on_hand_imp }}"
 				con="{{ location.service_delivery_point.stock_on_hand_con }}"
+				msd_code="{{ location.service_delivery_point.msd_code }}"
+			{% if location.service_delivery_point.randr_status %}
+				randr_status="{{ location.service_delivery_point.randr_status }}: {{ location.service_delivery_point.randr_status.status_date }}"
+			{% else %}
+				randr_status="No status reported"
+			{% endif %}			
 				last_reported="{{ location.service_delivery_point.stock_on_hand_last_reported }}">
 				{{ location.InfoWindowHTML }}
 			</li>{% endfor %}{% endfor %}

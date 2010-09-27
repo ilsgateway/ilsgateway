@@ -55,4 +55,4 @@ class RegisterHandler(KeywordHandler):
         self.msg.connection.contact = contact
         self.msg.connection.save()
 
-        self.respond("Thank you for registering at %s, %s" % (msd_code, contact.name))
+        self.respond("Thank you for registering at %s, %s, %s" % (sdp.name, msd_code, contact.name))

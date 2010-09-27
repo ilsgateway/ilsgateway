@@ -84,12 +84,12 @@ class SchedulerThread (threading.Thread):
         while not self.stopped():
             event_schedules = EventSchedule.objects.filter(active=True)
             for schedule in event_schedules:
-                try:
+                #try:
                     if schedule.should_fire(now):
                         # call the callback function
                         # possibly passing in args and kwargs
                         module, callback = schedule.callback.rsplit(".", 1)
-                        module = __import__(module, globals(), locals(), [callback])
+                        module = __import__(module, globals(), locals(), [str(callback)])
                         callback = getattr(module, callback)
                         if schedule.callback_args and schedule.callback_kwargs:
                             callback(self._router, *schedule.callback_args, **schedule.callback_kwargs)
@@ -109,10 +109,10 @@ class SchedulerThread (threading.Thread):
                         if schedule.end_time:
                             if now > schedule.end_time:
                                 schedule.deactivate()
-                except Exception, e:
+                #except Exception, e:
                     # Don't prevent exceptions from killing the thread
-                    self._router.error("Problem in scheduler for: %s. %s" % (schedule,
-                                                                             e.message))
+                 #   self._router.error("Problem in scheduler for: %s. %s" % (schedule,
+                  #                                                           e.message))
                     
             if self._speedup is not None: # debugging/testing only!
                 now = now + self._speedup

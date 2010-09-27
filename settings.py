@@ -43,6 +43,8 @@ LANGUAGES = (
   ('es', _('Spanish')),
 )
 
+LANGUAGE_CODE = 'sw'
+
 USE_L10N = True
 USE_I18N = True
 
@@ -106,9 +108,9 @@ INSTALLED_APPS = RAPIDSMS_BASE_APPS + [
 # the tabs for RAPIDSMS_APPS.
 RAPIDSMS_TABS = [
     ("rapidsms.contrib.registration.views.registration",    "Registration"),
-    ("rapidsms.contrib.messaging.views.messaging",          "Messaging"),
+#    ("rapidsms.contrib.messaging.views.messaging",          "Messaging"),
     ("rapidsms.contrib.locations.views.locations",          "Map"),
-    ("rapidsms.contrib.scheduler.views.index",              "Event Scheduler"),
+#    ("rapidsms.contrib.scheduler.views.index",              "Event Scheduler"),
     ("rapidsms.contrib.httptester.views.generate_identity", "Message Tester"),
 ]
 

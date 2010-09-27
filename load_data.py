@@ -185,8 +185,31 @@ def LoadFacilities(in_file):
         
     print "Loaded %d new Facilities, skipped %d" % (count, skipped)
 
+def LoadSchedules():
+    e = EventSchedule(callback="ilsgateway.callbacks.facility_randr_reminder", 
+                      description='Facility R&R Reminder', 
+                      days_of_month='*',
+                      hours=set([1]), 
+                      minutes=set([1]))
+    e.save()
+    
+    e = EventSchedule(callback="ilsgateway.callbacks.district_randr_reminder", description='District R&R Reminder', 
+                      days_of_month='*',
+                      hours=set([1]), 
+                      minutes=set([2]))
+    e.save()
+
+    e = EventSchedule(callback="ilsgateway.callbacks.facility_delivery_reminder", description='Facility Delivery Reminder', 
+                      days_of_month='*',
+                      hours=set([1]), 
+                      minutes=set([3]))
+    e.save()
+    print "Loaded EventSchedules"
+
+
 from django.core.management import execute_manager
-import sys, os
+import sys, os    
+
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
@@ -207,6 +230,7 @@ if __name__ == "__main__":
     from ilsgateway.models import ServiceDeliveryPoint, ServiceDeliveryPointType, DeliveryGroup, FacilityLocation, DistrictLocation, RegionLocation
     from django.contrib.contenttypes.models import ContentType
     from rapidsms.contrib.locations.models import Point
+    from rapidsms.contrib.scheduler.models import EventSchedule
     
     project_root = os.path.abspath(os.path.dirname(__file__))
     
@@ -222,3 +246,4 @@ if __name__ == "__main__":
     LoadRegions(regions_file)
     LoadDistricts(districts_file)
     LoadFacilities(facilities_file)
+    LoadSchedules()
