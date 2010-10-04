@@ -23,29 +23,20 @@ def LoadRegions(in_file):
         if region_name == 0:
             continue
 
-        existing_sdp = ServiceDeliveryPoint.objects.filter(name=region_name)
+        existing_sdp = Region.objects.filter(name=region_name)
         if existing_sdp:
             skipped = skipped + 1
             continue
-        
-        sdp_type = ServiceDeliveryPointType.objects.filter(name__iexact="region")
-        if not sdp_type:
-            print "Missing Region Service Delivery Point Type - reload initial data with loaddata"
-        
-        sdp = ServiceDeliveryPoint()
-        sdp.parent_service_delivery_point = top_level_sdp            
-        sdp.name = row[1]
-        sdp.service_delivery_point_type = sdp_type[0]
-        print sdp
-        sdp.save()
+                
         longitude = row[2] 
         latitude = row[3]
         p = None
         if longitude and longitude != '0' and latitude and latitude != '0':
             p = Point(latitude=latitude, longitude=longitude)
             p.save()
-        sdpl = RegionLocation(point=p, service_delivery_point=sdp)
-        sdpl.save()        
+        sdp = Region(point=p, name=row[1], parent_type=ContentType.objects.get_for_model(MinistryOfHealth), parent_id = top_level_sdp.id, service_delivery_point_type_id=2)
+        sdp.save()
+        print sdp
         count = count + 1
         
     print "Loaded %d new Region(s), skipped %d" % (count, skipped)
@@ -70,12 +61,12 @@ def LoadDistricts(in_file):
         if not district_name or district_name == 0:
             continue
 
-        existing_sdp = ServiceDeliveryPoint.objects.filter(name=district_name)
+        existing_sdp = District.objects.filter(name=district_name)
         if existing_sdp:
             skipped = skipped + 1
             continue
         
-        sdp = ServiceDeliveryPoint()
+        sdp = District()
         parent_name = row[0].upper()
         parent_regions = ServiceDeliveryPoint.objects.filter(name=parent_name)
         if not parent_regions:
@@ -83,31 +74,20 @@ def LoadDistricts(in_file):
             print "Please correct and retry"
             sys.exit(1)
             
-        sdp.parent_service_delivery_point = parent_regions[0]            
-
-        sdp_type = ServiceDeliveryPointType.objects.filter(name__iexact="district")
-        if not sdp_type:
-            print "Missing District Service Delivery Point Type - reload initial data with loaddata"
-
-        sdp.service_delivery_point_type = sdp_type[0]
+        sdp.parent_id = parent_regions[0].id  
+        sdp.parent_type = ContentType.objects.get_for_model(Region)
+         
         sdp.name = district_name
-        print sdp
-        sdp.save()
         longitude = row[3] 
         latitude = row[4]
         p = None
         if longitude and longitude != '0' and latitude and latitude != '0':
             p = Point(latitude=latitude, longitude=longitude)
             p.save()
-        sdpl = DistrictLocation(point=p, service_delivery_point=sdp)
-
-        parent_sdpls = sdp.parent_service_delivery_point.regionlocation_set.all()
-        if not parent_sdpls:
-            print sdp, " is missing a parent region location!"
-
-        sdpl.parent_id = parent_sdpls[0].id
-        sdpl.parent_type = ContentType.objects.get_for_model(RegionLocation)
-        sdpl.save()
+        sdp.point = p
+        sdp.service_delivery_point_type_id=3
+        sdp.save()
+        print sdp
         count = count + 1
         
     print "Loaded %d new District(s), skipped %d" % (count, skipped)
@@ -132,7 +112,7 @@ def LoadFacilities(in_file):
             continue
 
         parent_name = row[1].upper()
-        parent_districts = ServiceDeliveryPoint.objects.filter(name=parent_name)
+        parent_districts = District.objects.filter(name=parent_name)
         if not parent_districts:
             print "Invalid District Name: %s" % parent_name
             print "Please correct and retry"
@@ -144,19 +124,16 @@ def LoadFacilities(in_file):
             print "Invalid MSD code format: %s" % msd_code
             sys.exit(1)
 
-        existing_sdp = ServiceDeliveryPoint.objects.filter(msd_code=msd_code)
+        existing_sdp = Facility.objects.filter(msd_code=msd_code)
         if existing_sdp:
             print "Facility with MSD Code %s already exists - skipping" % msd_code 
             skipped = skipped + 1
             continue
         
-        sdp = ServiceDeliveryPoint()    
-        sdp_type = ServiceDeliveryPointType.objects.filter(name__iexact="facility")
-        if not sdp_type:
-            print "Missing Facility Service Delivery Point Type - reload initial data with loaddata"
-
-        sdp.service_delivery_point_type = sdp_type[0]
-        sdp.parent_service_delivery_point = parent_districts[0]            
+        sdp = Facility()    
+        sdp.parent_id = parent_districts[0].id
+        sdp.parent_type = ContentType.objects.get_for_model(District)
+            
         sdp.name = facility_name         
         sdp.msd_code = row[0]
         delivery_group_name = row[3].upper()
@@ -165,46 +142,40 @@ def LoadFacilities(in_file):
             print "Invalid Delivery Group: %s" % delivery_group_name
 
         sdp.delivery_group = delivery_groups[0]
-        sdp.save()
         longitude = row[4] 
         latitude = row[5]
         p = None
         if longitude and longitude != '0' and latitude and latitude != '0':
             p = Point(latitude=latitude, longitude=longitude)
-            p.save()            
-        sdpl = FacilityLocation(point=p, service_delivery_point=sdp)
-        parent_sdpls = sdp.parent_service_delivery_point.districtlocation_set.all()
-        if not parent_sdpls:
-            print sdp, " is missing a parent district location!"
-
-        sdpl.parent_id = parent_sdpls[0].id
-        sdpl.parent_type = ContentType.objects.get_for_model(DistrictLocation)
-        sdpl.save()
-        count = count + 1
+            p.save()
+        sdp.point = p            
+        sdp.service_delivery_point_type_id=4
+        sdp.save()
         print sdp, longitude, latitude
+        count = count + 1
         
     print "Loaded %d new Facilities, skipped %d" % (count, skipped)
 
 def LoadSchedules():
-    e = EventSchedule(callback="ilsgateway.callbacks.facility_randr_reminder", 
-                      description='Facility R&R Reminder', 
-                      days_of_month='*',
-                      hours=set([1]), 
-                      minutes=set([1]))
-    e.save()
-    
-    e = EventSchedule(callback="ilsgateway.callbacks.district_randr_reminder", description='District R&R Reminder', 
-                      days_of_month='*',
-                      hours=set([1]), 
-                      minutes=set([2]))
-    e.save()
-
-    e = EventSchedule(callback="ilsgateway.callbacks.facility_delivery_reminder", description='Facility Delivery Reminder', 
-                      days_of_month='*',
-                      hours=set([1]), 
-                      minutes=set([3]))
-    e.save()
-    print "Loaded EventSchedules"
+    count = 0
+    callbacks = ['ilsgateway.callbacks.facility_randr_reminder', 
+                 'ilsgateway.callbacks.district_randr_reminder', 
+                 'ilsgateway.callbacks.facility_delivery_reminder', 
+                 'ilsgateway.callbacks.district_delivery_reminder', 
+                 'ilsgateway.callbacks.district_delinquent_deliveries_summary',
+                 'ilsgateway.callbacks.facility_soh_reminder',]    
+    for callback in callbacks: 
+        if not EventSchedule.objects.filter(callback=callback):
+            e = EventSchedule(callback=callback, 
+                              description=callback, 
+                              days_of_month='*',
+                              #hours=set([12]), 
+                              #minutes=set([1]))
+                              hours='*',
+                              minutes='*')
+            e.save()
+            count = count + 1
+    print "Loaded %d EventSchedules" % count
 
 
 from django.core.management import execute_manager
@@ -227,7 +198,7 @@ if __name__ == "__main__":
         sys.path.insert(0, path)
     sys.path.insert(0, project_root)
 
-    from ilsgateway.models import ServiceDeliveryPoint, ServiceDeliveryPointType, DeliveryGroup, FacilityLocation, DistrictLocation, RegionLocation
+    from ilsgateway.models import ServiceDeliveryPoint, DeliveryGroup, Facility, District, Region, MinistryOfHealth
     from django.contrib.contenttypes.models import ContentType
     from rapidsms.contrib.locations.models import Point
     from rapidsms.contrib.scheduler.models import EventSchedule

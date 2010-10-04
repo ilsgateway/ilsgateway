@@ -13,7 +13,7 @@ from .forms import *
 from .models import *
 from .tables import *
 from . import utils
-from ilsgateway.models import FacilityLocation, DistrictLocation, RegionLocation
+from ilsgateway.models import Facility, District, Region, MinistryOfHealth
 
 
 def _breadcrumbs(location=None, first_caption="TANZANIA"):
@@ -74,11 +74,11 @@ class LocationTypeStub(object):
 
     def locations(self):
         if self._loc is not None:
-            if type(self._loc) == FacilityLocation and self._type == FacilityLocation:
+            if type(self._loc) == Facility and self._type == Facility:
                 return [self._loc]
-            elif type(self._loc) == RegionLocation and self._type == FacilityLocation:
+            elif type(self._loc) == Region and self._type == Facility:
                 #this can't be right...and yet it works
-                return FacilityLocation.objects.filter(service_delivery_point__parent_service_delivery_point__parent_service_delivery_point=self._loc.service_delivery_point.id)
+                return self._loc.child_sdps()
             else:
                 return self._type.objects.filter(
                     parent_type=self.content_type(),
@@ -130,8 +130,7 @@ def locations(req, location_uid=None):
 
     types = [
         LocationTypeStub(type, req, view_location)
-        for type in Location.subclasses()]
-    types.reverse()
+        for type in [MinistryOfHealth, Region, District, Facility]]
     return render_to_response(
         "locations/dashboard.html", {
             "breadcrumbs": _breadcrumbs(view_location),

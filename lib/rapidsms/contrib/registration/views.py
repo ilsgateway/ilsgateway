@@ -40,10 +40,12 @@ def registration(req, pk=None):
         form = ContactDetailForm(
             instance=contact_detail, 
             service_delivery_point=my_sdp)
-
+    print my_sdp
+    print my_sdp.child_sdps()
+    print my_sdp.child_sdps_contacts()
     return render_to_response(
         "registration/dashboard.html", {
-            "contact_detail_table": ContactDetailTable(ContactDetail.objects.filter(service_delivery_point__parent_service_delivery_point=my_sdp), request=req),
+            "contact_detail_table": ContactDetailTable(my_sdp.child_sdps_contacts(), request=req),
             "contact_detail_form": form,
             "contact_detail": contact_detail
         }, context_instance=RequestContext(req)

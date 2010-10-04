@@ -27,7 +27,7 @@ class RegisterHandler(KeywordHandler):
     keyword = "register|reg|join"
 
     def help(self):
-        self.respond("To register, send JOIN <NAME> <MSD CODE>")
+        self.respond("To register, send register <name> <msd code>. example: register john patel d34002")
 
     def handle(self, text):
         words = text.split()
@@ -35,7 +35,7 @@ class RegisterHandler(KeywordHandler):
         msd_code = string.join(words, '') 
         
         if not msd_code:
-            self.respond("To register, send JOIN <NAME> <MSD CODE>.  You didn't include an MSD CODE.")
+            self.respond("To register, send register <name> <msd code>.  You didn't include an msd code. example: register john patel d34002")
             return
         else:            
             try:
