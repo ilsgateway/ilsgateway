@@ -151,6 +151,8 @@ def LoadFacilities(in_file):
         sdp.point = p            
         sdp.service_delivery_point_type_id=4
         sdp.save()
+        for product in Product.objects.all():
+            ActiveProduct.objects.create(product=product, service_delivery_point=sdp)
         print sdp, longitude, latitude
         count = count + 1
         
@@ -198,7 +200,7 @@ if __name__ == "__main__":
         sys.path.insert(0, path)
     sys.path.insert(0, project_root)
 
-    from ilsgateway.models import ServiceDeliveryPoint, DeliveryGroup, Facility, District, Region, MinistryOfHealth
+    from ilsgateway.models import ServiceDeliveryPoint, DeliveryGroup, Facility, District, Region, MinistryOfHealth, Product, ActiveProduct
     from django.contrib.contenttypes.models import ContentType
     from rapidsms.contrib.locations.models import Point
     from rapidsms.contrib.scheduler.models import EventSchedule
