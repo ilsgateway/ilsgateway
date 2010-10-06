@@ -24,6 +24,14 @@ def generate_identity(req):
 
 
 def message_tester(req, identity):
+    language = ''
+    if req.LANGUAGE_CODE == 'en':
+        language = 'English'
+    elif req.LANGUAGE_CODE == 'sw':
+        language = 'Swahili'
+    elif req.LANGUAGE_CODE == 'es':
+        language = 'Spanish'        
+    
     if req.method == "POST":
         form = forms.MessageForm(req.POST)
 
@@ -64,6 +72,7 @@ def message_tester(req, identity):
     return render_to_response(
         "httptester/index.html", {
             "router_available": router_available,
+            "language": language,
             "message_log": message_log,
             "message_form": form
         }, context_instance=RequestContext(req)

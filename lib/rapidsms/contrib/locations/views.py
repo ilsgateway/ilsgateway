@@ -91,6 +91,14 @@ class LocationTypeStub(object):
 
 
 def locations(req, location_uid=None):
+    language = ''
+    if req.LANGUAGE_CODE == 'en':
+        language = 'English'
+    elif req.LANGUAGE_CODE == 'sw':
+        language = 'Swahili'
+    elif req.LANGUAGE_CODE == 'es':
+        language = 'Spanish'        
+    
     view_location = None
 
     if location_uid is not None:
@@ -136,7 +144,7 @@ def locations(req, location_uid=None):
             "breadcrumbs": _breadcrumbs(view_location),
             "location": view_location,
             "location_types": types,
-
+            "language": language,
             # from rapidsms.contrib.locations.settings
             "default_latitude":  settings.MAP_DEFAULT_LATITUDE,
             "default_longitude": settings.MAP_DEFAULT_LONGITUDE,

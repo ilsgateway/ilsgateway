@@ -13,6 +13,14 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def registration(req, pk=None):
+    language = ''
+    if req.LANGUAGE_CODE == 'en':
+        language = 'English'
+    elif req.LANGUAGE_CODE == 'sw':
+        language = 'Swahili'
+    elif req.LANGUAGE_CODE == 'es':
+        language = 'Spanish'        
+    
     my_sdp = ServiceDeliveryPoint.objects.filter(contactdetail__user__id=req.user.id)[0:1].get()
     contact_detail = None
 
@@ -40,13 +48,11 @@ def registration(req, pk=None):
         form = ContactDetailForm(
             instance=contact_detail, 
             service_delivery_point=my_sdp)
-    print my_sdp
-    print my_sdp.child_sdps()
-    print my_sdp.child_sdps_contacts()
     return render_to_response(
         "registration/dashboard.html", {
             "contact_detail_table": ContactDetailTable(my_sdp.child_sdps_contacts(), request=req),
             "contact_detail_form": form,
-            "contact_detail": contact_detail
+            "contact_detail": contact_detail,
+            "language": language,
         }, context_instance=RequestContext(req)
     )
