@@ -48,6 +48,8 @@ LANGUAGE_CODE = 'sw'
 USE_L10N = True
 USE_I18N = True
 
+DEFAULT_BACKEND = 'message_tester'
+
 FORMAT_MODULE_PATH = 'ilsgateway.formats'
 
 DATABASES = {

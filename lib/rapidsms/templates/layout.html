@@ -55,7 +55,7 @@
 					<!-- <li><a href="/districts">Districts</a></li> -->
 					<li><a href="/facilities/inventory/">Current Stock Status</a></li>				
 					<li><a href="/facilities/ordering">Ordering Status</a></li>
-					<li><a href="/facilities/supervision">Supervision</a></li>				
+					<li><a href="/supervision">Supervision</a></li>				
 					{% for tab in tabs %}
 					<li class="app-{{ tab.name }}{% if tab.is_active %} active{% endif %}">
 						<a href="{{ tab.url }}"><span>{{ tab.caption }}</span></a>

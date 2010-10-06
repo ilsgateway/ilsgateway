@@ -5,6 +5,7 @@
 from rapidsms.contrib.handlers.handlers.keyword import KeywordHandler
 from ilsgateway.models import ContactDetail, ServiceDeliveryPoint, ContactRole
 import string
+import re
 
 
 class RegisterHandler(KeywordHandler):
@@ -31,8 +32,15 @@ class RegisterHandler(KeywordHandler):
 
     def handle(self, text):
         words = text.split()
-        name = words.pop(0)
-        msd_code = string.join(words, '') 
+        name = []
+        msd_code = []
+        for the_string in words:
+            if re.match('^d\d+', the_string.strip().lower()):
+                msd_code.append(the_string.strip().lower())
+            else:
+                name.append(the_string)
+        name = string.join(name, ' ') 
+        msd_code = string.join(msd_code, '')
         
         if not msd_code:
             self.respond("To register, send register <name> <msd code>.  You didn't include an msd code. example: register john patel d34002")
@@ -50,7 +58,7 @@ class RegisterHandler(KeywordHandler):
         if ContactDetail.objects.filter(primary=True, service_delivery_point=sdp):
             is_primary = False
             
-        contact = ContactDetail.objects.create(name=name, service_delivery_point=sdp, role=role, primary=is_primary)
+        contact = ContactDetail.objects.create(name=name, service_delivery_point=sdp, role=role, primary=is_primary, language="sw")
         
         self.msg.connection.contact = contact
         self.msg.connection.save()

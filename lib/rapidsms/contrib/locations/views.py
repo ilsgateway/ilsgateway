@@ -76,9 +76,6 @@ class LocationTypeStub(object):
         if self._loc is not None:
             if type(self._loc) == Facility and self._type == Facility:
                 return [self._loc]
-            elif type(self._loc) == Region and self._type == Facility:
-                #this can't be right...and yet it works
-                return self._loc.child_sdps()
             else:
                 return self._type.objects.filter(
                     parent_type=self.content_type(),

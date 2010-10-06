@@ -65,23 +65,23 @@
 		<div class="container"></div>
 
 		<ul class="labels">{% for type in location_types %}{% for location in type.locations %}
-			<li facility_link="/facilities/{{ location.service_delivery_point.id }}/months_of_stock/"
+			<li facility_link="/facilities/{{ location.id }}/months_of_stock/"
+				msd_code="{{ location.msd_code }}"
 				lat="{{ location.point.latitude }}" 
 				lng="{{ location.point.longitude }}" 
 				name="{{ location.name }}" 
-				inj="{{ location.service_delivery_point.stock_on_hand_inj }}"
-				coc="{{ location.service_delivery_point.stock_on_hand_coc }}"
-				pop="{{ location.service_delivery_point.stock_on_hand_pop }}"
-				iud="{{ location.service_delivery_point.stock_on_hand_iud }}"
-				imp="{{ location.service_delivery_point.stock_on_hand_imp }}"
-				con="{{ location.service_delivery_point.stock_on_hand_con }}"
-				msd_code="{{ location.service_delivery_point.msd_code }}"
-			{% if location.service_delivery_point.randr_status %}
-				randr_status="{{ location.service_delivery_point.randr_status }}: {{ location.service_delivery_point.randr_status.status_date }}"
+				inj="{{ location.stock_on_hand_inj }}"
+				coc="{{ location.stock_on_hand_coc }}"
+				pop="{{ location.stock_on_hand_pop }}"
+				iud="{{ location.stock_on_hand_iud }}"
+				imp="{{ location.stock_on_hand_imp }}"
+				con="{{ location.stock_on_hand_con }}"
+			{% if location.randr_status %}
+				randr_status="{{ location.randr_status }}: {{ location.randr_status.status_date }}"
 			{% else %}
-				randr_status="No status reported"
+				randr_status="No reminder sent"
 			{% endif %}			
-				last_reported="{{ location.service_delivery_point.stock_on_hand_last_reported }}">
+				last_reported="{{ location.stock_on_hand_last_reported }}">
 				{{ location.InfoWindowHTML }}
 			</li>{% endfor %}{% endfor %}
 		</ul>
