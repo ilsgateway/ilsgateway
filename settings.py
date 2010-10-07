@@ -130,7 +130,7 @@ INSTALLED_BACKENDS = {
     "message_tester": {
         "ENGINE": "rapidsms.backends.bucket"
     },
-    "my_http_backend" : {"ENGINE":  "rapidsms.backends.tropobackend", 
+    "push_backend" : {"ENGINE":  "rapidsms.backends.push", 
         "port": 8888,
 	"host": "0.0.0.0",
         "gateway_url": "http://www.smsgateway.com",
