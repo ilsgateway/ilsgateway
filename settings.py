@@ -40,7 +40,6 @@ MIDDLEWARE_CLASSES = (
 LANGUAGES = (
   ('sw', _('Swahili')),
   ('en', _('English')),
-  ('es', _('Spanish')),
 )
 
 LANGUAGE_CODE = 'sw'
