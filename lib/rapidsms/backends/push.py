@@ -18,7 +18,9 @@ class Push(RapidHttpBacked):
 #    if request.method != 'POST':
 #        return HttpResponse('Not a post!')
 #        self.debug('This is the Request (raw): %s' % request.raw_post_data)
-        self.debug('This is the Request (raw): %s' % request.raw_post_data)
+
+        self.debug('This is the entire request (raw): %s' % request)
+        self.debug('This is the POST (raw): %s' % request.raw_post_data)
         return HttpResponse('OK')
 
     def message(self, data):
