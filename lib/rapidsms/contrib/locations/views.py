@@ -13,7 +13,7 @@ from .forms import *
 from .models import *
 from .tables import *
 from . import utils
-from ilsgateway.models import Facility, District, Region, MinistryOfHealth
+from ilsgateway.models import Facility, District, Region, MinistryOfHealth, ServiceDeliveryPoint
 
 
 def _breadcrumbs(location=None, first_caption="TANZANIA"):

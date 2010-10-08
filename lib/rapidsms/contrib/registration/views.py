@@ -54,5 +54,6 @@ def registration(req, pk=None):
             "contact_detail_form": form,
             "contact_detail": contact_detail,
             "language": language,
+            "my_sdp": my_sdp,
         }, context_instance=RequestContext(req)
     )

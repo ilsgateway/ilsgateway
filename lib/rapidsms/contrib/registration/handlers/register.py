@@ -6,7 +6,7 @@ from rapidsms.contrib.handlers.handlers.keyword import KeywordHandler
 from ilsgateway.models import ContactDetail, ServiceDeliveryPoint, ContactRole
 import string
 import re
-
+from django.utils.translation import ugettext_noop as _
 
 class RegisterHandler(KeywordHandler):
     """
@@ -28,7 +28,7 @@ class RegisterHandler(KeywordHandler):
     keyword = "register|reg|join"
 
     def help(self):
-        self.respond("To register, send register <name> <msd code>. example: register john patel d34002")
+        self.respond(_("To register, send register <name> <msd code>. Example: register 'john patel d34002'"))
 
     def handle(self, text):
         words = text.split()
@@ -43,13 +43,13 @@ class RegisterHandler(KeywordHandler):
         msd_code = string.join(msd_code, '')
         
         if not msd_code:
-            self.respond("To register, send register <name> <msd code>.  You didn't include an msd code. example: register john patel d34002")
+            self.respond(_("To register, send register <name> <msd code>.  You didn't include an msd code. example: register john patel d34002"))
             return
         else:            
             try:
                 sdp = ServiceDeliveryPoint.objects.filter(msd_code__iexact=msd_code)[0:1].get()
             except ServiceDeliveryPoint.DoesNotExist:
-                self.respond("Sorry, can't find the location with MSD CODE %s" % msd_code)
+                self.respond(_("Sorry, can't find the location with MSD CODE %s"), msd_code=msd_code)
                 return
         
         #Default to Facility in-charge for now
@@ -62,5 +62,8 @@ class RegisterHandler(KeywordHandler):
         
         self.msg.connection.contact = contact
         self.msg.connection.save()
+        kwargs = {'sdp_name': sdp.name,
+                  'msd_code': msd_code,
+                  'contact_name': contact.name}
 
-        self.respond("Thank you for registering at %s, %s, %s" % (sdp.name, msd_code, contact.name))
+        self.respond(_("Thank you for registering at %(sdp_name)s, %(msd_code)s, %(contact_name)s"), **kwargs)

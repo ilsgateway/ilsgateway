@@ -42,7 +42,7 @@
 
 				{% block auth %}
 				<div id="auth">{% if user.is_authenticated %}
-					{% trans 'Language' %}: {{ language }} <a href="/change_language">Change language</a> | 
+					{% trans 'Language' %}: {{ language }} <a href="/change_language">{% trans 'Change language' %}</a> | 
 					<a href="{% url rapidsms.views.logout %}">{% trans "Log out" %} {{ user.username }}</a>{% else %}
 					<a href="{% url rapidsms.views.login %}">{% trans "Log in" %}</a>{% endif %}
 				</div>
@@ -51,14 +51,14 @@
 				{% get_tabs as tabs %}
 
 				<ul id="tabs">
-					<li><a href="/">Dashboard</a></li>
-					<!-- <li><a href="/districts">Districts</a></li> -->
-					<li><a href="/facilities/inventory/">Current Stock Status</a></li>				
-					<li><a href="/facilities/ordering">Ordering Status</a></li>
-					<li><a href="/supervision">Supervision</a></li>				
+					<li><a href="/">{% trans 'Dashboard' %}</a></li>
+					<!-- <li><a href="/districts">{% trans 'Districts' %}</a></li> -->
+					<li><a href="/facilities/inventory/">{% trans 'Current Stock Status' %}</a></li>				
+					<li><a href="/facilities/ordering">{% trans 'Ordering Status' %}</a></li>
+					<li><a href="/supervision">{% trans 'Supervision' %}</a></li>				
 					{% for tab in tabs %}
 					<li class="app-{{ tab.name }}{% if tab.is_active %} active{% endif %}">
-						<a href="{{ tab.url }}"><span>{{ tab.caption }}</span></a>
+						<a href="{{ tab.url }}"><span>{% blocktrans with tab.caption as caption  %}{{ caption }}{% endblocktrans %}</span></a>
 					</li>{% endfor %}
 				</ul>
 
