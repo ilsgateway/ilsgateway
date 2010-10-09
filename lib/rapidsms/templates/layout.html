@@ -60,7 +60,7 @@
 						<a href="{{ tab.url }}"><span>{% blocktrans with tab.caption as caption  %}{{ caption }}{% endblocktrans %}</span></a>
 					</li>{% endfor %}
 				{% if user.id == 2 %}
-					<li><a href="{% url rapidsms.contrib.httptester.views.generate_identity %}/message-tester">{% trans 'Message Tester' %}</a></li>
+					<li><a href="{% url rapidsms.contrib.httptester.views.generate_identity %}">{% trans 'Message Tester' %}</a></li>
 				{% endif %}
 				</ul>
 
