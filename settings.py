@@ -201,6 +201,8 @@ TEST_DATABASE_NAME = os.path.join(tempfile.gettempdir(), "rapidsms.test.sqlite3"
 
 # the default log settings are very noisy.
 LOG_LEVEL   = "DEBUG"
+#dev setting
+#LOG_FILE    = "/tmp/rapidsms_dev.log"
 LOG_FILE    = "/tmp/rapidsms.log"
 LOG_FORMAT  = "[%(name)s]: %(message)s"
 LOG_SIZE    = 8192 # 8192 bytes = 64 kb
