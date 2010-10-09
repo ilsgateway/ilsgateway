@@ -20,8 +20,13 @@ def registration(req, pk=None):
         language = 'Swahili'
     elif req.LANGUAGE_CODE == 'es':
         language = 'Spanish'        
+
+    sdp_id = req.session.get('current_sdp_id')
+    if sdp_id:
+		my_sdp = ServiceDeliveryPoint.objects.get(id=sdp_id)
+    else:
+	    my_sdp = ServiceDeliveryPoint.objects.filter(contactdetail__user__id=req.user.id)[0:1].get()
     
-    my_sdp = ServiceDeliveryPoint.objects.filter(contactdetail__user__id=req.user.id)[0:1].get()
     contact_detail = None
 
     if pk is not None:

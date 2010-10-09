@@ -34,7 +34,6 @@ class OutgoingMessage(MessageBase):
         if self._connection.contact is not None:
             if self._connection.contact.language:
                 return self._connection.contact.language
-        print settings.LANGUAGE_CODE
         return settings.LANGUAGE_CODE
 
 

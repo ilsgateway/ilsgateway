@@ -8,29 +8,37 @@ from urllib import urlencode
 from urllib2 import urlopen
 
 class Push(RapidHttpBacked):
-    """ A RapidSMS backend for PUSH SMS"""
+    """ A RapidSMS backend for PUSH SMS
+    
+    Example POST:
+    
+    RemoteNetwork=celtel-tz&IsReceipt=NO&BSDate-tomorrow=20101009&Local=*15522&ReceiveDate=2010-10-08%2016:46:22%20%2B0000&BSDate-today=20101008&ClientID=1243&MessageID=336876061&ChannelID=9840&ReceiptStatus=&ClientName=OnPoint%20-%20TZ&Prefix=JSI&MobileDevice=&BSDate-yesterday=20101007&Remote=%2B255785000017&MobileNetwork=celtel-tz&State=11&ServiceID=124328&Text=test%203&MobileNumber=%2B255785000017&NewSubscriber=NO&RegType=1&Subscriber=%2B255785000017&ServiceName=JSI%20Demo&Parsed=&BSDate-thisweek=20101004&ServiceEndDate=2010-10-30%2023:29:00%20%2B0300&Now=2010-10-08%2016:46:22%20%2B0000
+    
+    """
 
     def configure(self, config=None, **kwargs):
         self.config = config
         super(Push, self).configure(**kwargs)
 
     def handle_request(self, request):
-#    if request.method != 'POST':
-#        return HttpResponse('Not a post!')
-#        self.debug('This is the Request (raw): %s' % request.raw_post_data)
-
-        self.debug('This is the entire request (raw): %s' % request)
-        self.debug('This is the POST (raw): %s' % request.raw_post_data)
+        if request.method != 'POST':
+            return HttpResponse('Not a post!')
+        #self.debug('This is the entire request (raw): %s' % request)
+        self.debug('This is the PUSH inbound POST data: %s' % request.raw_post_data)
+        message = self.message(request.POST)
+        if message:
+                self.route(message)
+        #We may need to return some XML here, but the current config is sending URL-encoded POST data and not XML, so we'll just send back a 200 OK
         return HttpResponse('OK')
 
     def message(self, data):
-#        sms = data.get('msg', '')
-#        sender = data.get('user', '')
-#        if not sms or not sender:
-#            self.error('Missing from or text: %s' % data)
-#            return None
-#        now = datetime.datetime.utcnow()
-#        return super(TropoBackend, self).message(sender, sms, now)
+        text = data.get('Text', '')
+        mobile_number = data.get('MobileNumber', '')
+        if not text or not mobile_number:
+            self.error('Missing mobile number or text: %s' % data)
+            return None
+        now = datetime.datetime.utcnow()
+        return super(Push, self).message(mobile_number, text, now)
         self.debug(data)
     def send(self, message):
 #    base_url = 'http://api.tropo.com/1.0/sessions'
@@ -42,5 +50,5 @@ class Push(RapidHttpBacked):
 #    params = urlencode([('action', action), ('token', token), ('numberToDial', message.connection.identity), ('msg', message.text)])
 #    self.debug("%s?%s" % (base_url, params))
 #    data = urlopen('%s?%s' % (base_url, params)).read()
-        self.debug(message)
+     self.debug(message)
 

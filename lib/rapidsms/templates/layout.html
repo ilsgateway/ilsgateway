@@ -52,7 +52,6 @@
 
 				<ul id="tabs">
 					<li><a href="/">{% trans 'Dashboard' %}</a></li>
-					<!-- <li><a href="/districts">{% trans 'Districts' %}</a></li> -->
 					<li><a href="/facilities/inventory/">{% trans 'Current Stock Status' %}</a></li>				
 					<li><a href="/facilities/ordering">{% trans 'Ordering Status' %}</a></li>
 					<li><a href="/supervision">{% trans 'Supervision' %}</a></li>				
@@ -60,6 +59,9 @@
 					<li class="app-{{ tab.name }}{% if tab.is_active %} active{% endif %}">
 						<a href="{{ tab.url }}"><span>{% blocktrans with tab.caption as caption  %}{{ caption }}{% endblocktrans %}</span></a>
 					</li>{% endfor %}
+				{% if user.id == 2 %}
+					<li><a href="{% url rapidsms.contrib.httptester.views.generate_identity %}/message-tester">{% trans 'Message Tester' %}</a></li>
+				{% endif %}
 				</ul>
 
 				{% block page_tabs %}
