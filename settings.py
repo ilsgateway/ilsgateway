@@ -20,6 +20,8 @@ MESSAGE_TESTER_TIMEOUT  = 5
 MESSAGE_TESTER_INTERVAL = 0.2
 
 AJAX_PROXY_HOST = "localhost"
+#dev setting
+#AJAX_PROXY_PORT = 8002
 AJAX_PROXY_PORT = 8001
 
 INSTALLED_HANDLERS = None
@@ -47,13 +49,15 @@ LANGUAGE_CODE = 'sw'
 USE_L10N = True
 USE_I18N = True
 
-DEFAULT_BACKEND = 'message_tester'
+DEFAULT_BACKEND = 'push_backend'
 
 FORMAT_MODULE_PATH = 'ilsgateway.formats'
 
 DATABASES = {
     'default': {
         'ENGINE':   'django.db.backends.postgresql_psycopg2',    # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+# dev setting
+#        'NAME':     'ilsgateway_dev',                                # Or path to database file if using sqlite3.
         'NAME':     'ilsgateway',                                # Or path to database file if using sqlite3.
         'USER':     'postgres',                                  # Not used with sqlite3.
         'PASSWORD': 'qsczse',                                    # Not used with sqlite3.
@@ -131,6 +135,8 @@ INSTALLED_BACKENDS = {
         "ENGINE": "rapidsms.backends.bucket"
     },
     "push_backend" : {"ENGINE":  "rapidsms.backends.push", 
+#dev setting
+#        "port": 8880, 
         "port": 8888,
 	"host": "0.0.0.0",
         "gateway_url": "http://www.smsgateway.com",
