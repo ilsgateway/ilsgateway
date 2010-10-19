@@ -25,7 +25,7 @@ class RegisterHandler(KeywordHandler):
     Contact, disable this handler, and write your own.
     """
 
-    keyword = "register|reg|join"
+    keyword = "register|reg|join|sajili"
 
     def help(self):
         self.respond(_("To register, send register <name> <msd code>. Example: register 'john patel d34002'"))
@@ -43,13 +43,14 @@ class RegisterHandler(KeywordHandler):
         msd_code = string.join(msd_code, '')
         
         if not msd_code:
-            self.respond(_("To register, send register <name> <msd code>.  You didn't include an msd code. example: register john patel d34002"))
+            self.respond(_("I didn't recognize your msd code.  To register, send register <name> <msd code>. example: register Peter Juma d34002"))
             return
         else:            
             try:
                 sdp = ServiceDeliveryPoint.objects.filter(msd_code__iexact=msd_code)[0:1].get()
             except ServiceDeliveryPoint.DoesNotExist:
-                self.respond(_("Sorry, can't find the location with MSD CODE %s"), msd_code=msd_code)
+                kwargs = {'msd_code': msd_code}
+                self.respond(_("Sorry, can't find the location with MSD CODE %(msd_code)s"), **kwargs )
                 return
         
         #Default to Facility in-charge for now
