@@ -10,7 +10,8 @@ for dir in ["lib", "apps"]:
     sys.path.insert(0, path)
 sys.path.insert(0, project_root)
 
-DEFAULT_RESPONSE = "Sorry, %(project_name)s could not understand your message."
+#DEFAULT_RESPONSE = "Sorry, %(project_name)s could not understand your message."
+DEFAULT_RESPONSE = "Sahani, sijaelewa ujumbe wako. Jafadhali tuma 'msaada' kwa msaada zaidi"
 
 PROJECT_NAME = "ILSGateway"
 DEBUG = True
