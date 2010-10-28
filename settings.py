@@ -13,6 +13,8 @@ sys.path.insert(0, project_root)
 #DEFAULT_RESPONSE = "Sorry, %(project_name)s could not understand your message."
 DEFAULT_RESPONSE = "Sahani, sijaelewa ujumbe wako. Jafadhali tuma 'msaada' kwa msaada zaidi"
 
+TIME_ZONE = "Africa/Dar_es_Salaam"
+
 PROJECT_NAME = "ILSGateway"
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
