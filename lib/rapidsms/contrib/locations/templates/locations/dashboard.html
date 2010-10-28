@@ -70,12 +70,12 @@
 				lat="{{ location.point.latitude }}" 
 				lng="{{ location.point.longitude }}" 
 				name="{{ location.name }}" 
-				inj="{{ location.stock_on_hand_inj }}"
+				depo="{{ location.stock_on_hand.inj }}"
 				coc="{{ location.stock_on_hand_coc }}"
 				pop="{{ location.stock_on_hand_pop }}"
-				iud="{{ location.stock_on_hand_iud }}"
-				imp="{{ location.stock_on_hand_imp }}"
-				con="{{ location.stock_on_hand_con }}"
+				iucd="{{ location.stock_on_hand_iud }}"
+				impl="{{ location.stock_on_hand_imp }}"
+				cond="{{ location.stock_on_hand_con }}"
 			{% if location.randr_status %}
 				randr_status="{{ location.randr_status }}: {{ location.randr_status.status_date }}"
 			{% else %}

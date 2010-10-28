@@ -53,8 +53,12 @@ class RegisterHandler(KeywordHandler):
                 self.respond(_("Sorry, can't find the location with MSD CODE %(msd_code)s"), **kwargs )
                 return
         
-        #Default to Facility in-charge for now
-        role = ContactRole.objects.filter(name="Facility in-charge")[0:1].get()
+        #Default to Facility in-charge or District Pharmacist for now
+        if sdp.service_delivery_point_type.name == "DISTRICT":
+            role = ContactRole.objects.filter(name="District Pharmacist")[0:1].get()
+        elif sdp.service_delivery_point_type.name == "FACILITY":
+            role = ContactRole.objects.filter(name="Facility in-charge")[0:1].get()
+            
         is_primary = True
         if ContactDetail.objects.filter(primary=True, service_delivery_point=sdp):
             is_primary = False
