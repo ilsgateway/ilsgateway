@@ -60,8 +60,8 @@ class RegisterHandler(KeywordHandler):
             role = ContactRole.objects.filter(name="Facility in-charge")[0:1].get()
             
         is_primary = True
-        if ContactDetail.objects.filter(primary=True, service_delivery_point=sdp):
-            is_primary = False
+#        if ContactDetail.objects.filter(primary=True, service_delivery_point=sdp):
+#            is_primary = False
             
         contact = ContactDetail.objects.create(name=name, service_delivery_point=sdp, role=role, primary=is_primary, language="sw")
         

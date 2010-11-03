@@ -13,7 +13,7 @@ from .forms import *
 from .models import *
 from .tables import *
 from . import utils
-from ilsgateway.models import Facility, District, Region, MinistryOfHealth, ServiceDeliveryPoint
+from ilsgateway.models import Facility, District, Region, MinistryOfHealth, ServiceDeliveryPoint, Product
 
 
 def _breadcrumbs(location=None, first_caption="TANZANIA"):
@@ -136,6 +136,12 @@ def locations(req, location_uid=None):
     types = [
         LocationTypeStub(type, req, view_location)
         for type in [MinistryOfHealth, Region, District, Facility]]
+    openwindow = False
+    try: 
+        view_location.facility
+        openwindow = True
+    except:
+        pass
     return render_to_response(
         "locations/dashboard.html", {
             "breadcrumbs": _breadcrumbs(view_location),
@@ -145,6 +151,8 @@ def locations(req, location_uid=None):
             # from rapidsms.contrib.locations.settings
             "default_latitude":  settings.MAP_DEFAULT_LATITUDE,
             "default_longitude": settings.MAP_DEFAULT_LONGITUDE,
+            "products": Product.objects.all(),
+            "openwindow": openwindow,
 
             # if there are no locationtypes, then we should display a
             # big error, since this app is useless without them.
