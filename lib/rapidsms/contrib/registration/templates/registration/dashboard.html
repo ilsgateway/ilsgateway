@@ -1,7 +1,8 @@
 {% extends "registration/base.html" %}
 {% load i18n %}
 {% load forms_tags %}
-
+{% load djtables_tags %}
+{% load custom_table_tags %}
 
 {% block stylesheets %}
 {{ block.super }}
@@ -10,11 +11,18 @@
 
 {% block left %}
 <div class="module">
-	<h2>{{ my_sdp.name }} - Contacts</h2>
-	{{ contact_detail_table.as_html }}{% if contact_detail %}
+	<h2>{{ my_sdp.name }} {% trans "Contacts" %}</h2>
+	<table class="users">
+	  {% table_cols contact_detail_table %}
+	  {% translated_table_head contact_detail_table %}
+	  {% table_body contact_detail_table %}
+	  {% table_foot contact_detail_table %}
+	</table>
+
+	{% if contact_detail %}
 
 	<div class="toolbar">
-		<a href="{% url registration %}" class="add">Add a Contact</a>
+		<a href="{% url registration %}" class="add">{% trans "Add a Contact" %}</a>
 	</div>{% endif %}
 </div>
 {% endblock %}
@@ -23,7 +31,7 @@
 <div class="module">
 	<h2>{% if contact %}
 		Edit {{ contact }}{% else %}
-		Add a Contact{% endif %}
+		{% trans "Add a contact" %}{% endif %}
 	</h2>
 
 	<form action="" method="post">
@@ -31,7 +39,7 @@
 		{% csrf_token %}
 
 		<div class="submit">
-			<input type="submit" name="submit" value="Save Contact" />{% if contact %}
+			<input type="submit" name="submit" value="{% trans "Save Contact" %}" />{% if contact %}
 			<input type="submit" name="submit" value="Delete Contact" />{% endif %}
 		</div>
 	</form>
