@@ -28,10 +28,14 @@ def registration(req, pk=None):
 	    my_sdp = ServiceDeliveryPoint.objects.filter(contactdetail__user__id=req.user.id)[0:1].get()
     
     contact_detail = None
-
     if pk is not None:
         contact_detail = get_object_or_404(
             ContactDetail, pk=pk)
+    cd = ContactDetail.objects.get(user__id=req.user.id)
+    allowed_to_edit = True
+    if contact_detail:
+        allowed_to_edit = cd.allowed_to_edit(contact_detail.service_delivery_point.parent)
+    allowed_to_add = cd.allowed_to_edit(my_sdp)
 
     if req.method == "POST":
         if req.POST["submit"] == "Delete Contact Detail":
@@ -42,6 +46,8 @@ def registration(req, pk=None):
         else:
             form = ContactDetailForm(
                 instance=contact_detail,
+                service_delivery_point=my_sdp,
+                cd=cd,
                 data=req.POST)
 
             if form.is_valid():
@@ -52,13 +58,18 @@ def registration(req, pk=None):
     else:
         form = ContactDetailForm(
             instance=contact_detail, 
-            service_delivery_point=my_sdp)
+            service_delivery_point=my_sdp,
+            cd=cd)
     return render_to_response(
         "registration/dashboard.html", {
-            "contact_detail_table": ContactDetailTable(my_sdp.child_sdps_contacts(), request=req),
+            "facility_contact_detail_table": ContactDetailTable(my_sdp.child_sdps_contacts(), request=req),
+            "district_contact_detail_table": ContactDetailTable(my_sdp.contacts(), request=req),
+            "region_contact_detail_table": ContactDetailTable(my_sdp.parent.contacts(), request=req),
             "contact_detail_form": form,
             "contact_detail": contact_detail,
             "language": language,
             "my_sdp": my_sdp,
+            "allowed_to_edit": allowed_to_edit,
+            "allowed_to_add": allowed_to_add
         }, context_instance=RequestContext(req)
     )

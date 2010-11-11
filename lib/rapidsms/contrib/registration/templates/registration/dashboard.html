@@ -12,25 +12,47 @@
 {% block left %}
 <div class="module">
 	<h2>{{ my_sdp.name }} {% trans "Contacts" %}</h2>
-	<table class="users">
-	  {% table_cols contact_detail_table %}
-	  {% translated_table_head contact_detail_table %}
-	  {% table_body contact_detail_table %}
-	  {% table_foot contact_detail_table %}
+	{% if region_contact_detail_table %}
+
+	<h3>Region {% trans "Contacts" %}</h3>
+	<table class="region">
+	  {% table_cols region_contact_detail_table %}
+	  {% translated_table_head region_contact_detail_table %}
+	  {% table_body region_contact_detail_table %}
+	  {% table_foot region_contact_detail_table %}
+	</table>
+	{% endif %}
+
+	{% if district_contact_detail_table %}
+	<h3>District {% trans "Contacts" %}</h3>
+	<table class="district">
+	  {% table_cols district_contact_detail_table %}
+	  {% translated_table_head district_contact_detail_table %}
+	  {% table_body district_contact_detail_table %}
+	  {% table_foot district_contact_detail_table %}
+	</table>
+	{% endif %}
+
+    <h3>Facility {% trans "Contacts" %}</h3>
+	<table class="facility">
+	  {% table_cols facility_contact_detail_table %}
+	  {% translated_table_head facility_contact_detail_table %}
+	  {% table_body facility_contact_detail_table %}
+	  {% table_foot facility_contact_detail_table %}
 	</table>
 
-	{% if contact_detail %}
-
+	{% if allowed_to_add %}
 	<div class="toolbar">
 		<a href="{% url registration %}" class="add">{% trans "Add a Contact" %}</a>
-	</div>{% endif %}
+	</div>
+	{% endif %}
 </div>
 {% endblock %}
 
 {% block right %}
 <div class="module">
-	<h2>{% if contact %}
-		Edit {{ contact }}{% else %}
+	<h2>{% if contact_detail %}
+		{% if allowed_to_edit %}Edit {% endif %}{{ contact_detail }}{% else %}
 		{% trans "Add a contact" %}{% endif %}
 	</h2>
 
@@ -38,10 +60,12 @@
 		{% render_form contact_detail_form %}
 		{% csrf_token %}
 
+{% if allowed_to_edit %}
 		<div class="submit">
 			<input type="submit" name="submit" value="{% trans "Save Contact" %}" />{% if contact %}
 			<input type="submit" name="submit" value="Delete Contact" />{% endif %}
 		</div>
+{% endif %}
 	</form>
 </div>
 {% endblock %}

@@ -6,6 +6,7 @@
 {{ block.super }}
 <link type="text/css" rel="stylesheet" href="{{ MEDIA_URL }}locations/stylesheets/locations.css" />
 <link type="text/css" rel="stylesheet" href="{{ MEDIA_URL }}locations/stylesheets/label-overlay.css" />
+<link type="text/css" rel="stylesheet" href="{{ MEDIA_URL }}ilsgateway/stylesheets/ilsgateway.css" />
 {% endblock %}
 
 {% block javascripts %}
@@ -21,7 +22,7 @@
 	};
 	
 	function isStockout(loc) {
-	    return {% for product in products %}loc.attr('depo') == '0' {% if not forloop.last %}||{% endif %}{% endfor %};  
+	    return {% for product in products %}loc.attr('{{ product.sms_code }}_soh') == '0' {% if not forloop.last %}||{% endif %}{% endfor %};  
 	};
 	
 	function hasData(loc) {
@@ -71,7 +72,7 @@
 	                    '<p><i>&raquo;&nbsp;'+loc.attr("randr_status")+'</i></p>'+
 	                    '<p><span style="font-weight:bold;">Last stock on hand reported</span>:</p><p><i>&raquo;&nbsp;'+ loc.attr("last_reported") +'</i></p>'+
 	                    '<div id="stock_on_hand" style="display:none;">'+
-	                    '<p>Stock on Hand (<a href="#" onclick="$(stock_on_hand).hide(); $(months_of_stock).show();">show months of stock</a>)</p>'+
+	                    '<p>Stock on Hand (<a onclick="$(stock_on_hand).hide(); $(months_of_stock).show();">show months of stock</a>)</p>'+
 	                    '<table><thead><th>Product</th><th>Quantity</th></thead>'+
 	                    {% for product in products %}
 	                    '<tr>'+formatInventory(loc.attr('{{ product.sms_code }}_soh'),'{{ product.name }} ({{ product.sms_code }})')+'</tr>'+
@@ -79,7 +80,7 @@
 	                    '</table>'+
 	                    '</div>'+
 	                    '<div id="months_of_stock">'+
-	                    '<p>Months of stock (<a href="#" onclick="$(months_of_stock).hide(); $(stock_on_hand).show();">show stock on hand</a>)</p>'+
+	                    '<p>Months of stock (<a onclick="$(months_of_stock).hide(); $(stock_on_hand).show();">show stock on hand</a>)</p>'+
 	                    '<table><thead><th>Product</th><th>Months<br /> of Stock</th></thead>'+
 	                    {% for product in products %}
 	                    '<tr>'+formatInventory(loc.attr('{{ product.sms_code }}_mos'),'{{ product.name }} ({{ product.sms_code }})')+'</tr>'+
@@ -210,6 +211,7 @@
 
 {% block content %}
 	<h3>{% for title, href in breadcrumbs %}{% if not forloop.first %} &raquo; {% endif %}<a href="{{href}}">{{ title }}</a>{% endfor %}</h3>
+	<div id="mapLegend"><span class="stockedOut">&nbsp;</span>Stocked Out<span class="notStockedOut">&nbsp;</span>Not Stocked Out<span class="noData">&nbsp;</span>No Data</div>
 {{ block.super }}
 {% endblock %}
 
