@@ -18,7 +18,9 @@ TIME_ZONE = "Africa/Dar_es_Salaam"
 PROJECT_NAME = "ILSGateway"
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-
+TEMPLATE_DIRS = (
+    os.path.join(project_root, 'apps', 'ilsgateway', 'templates')
+)
 ADMIN_MEDIA_PREFIX = '/static/rapidsms/media/'
 
 MESSAGE_TESTER_TIMEOUT  = 5
