@@ -13,7 +13,7 @@ class LanguageHandler(KeywordHandler):
     ``language`` field of the Contact associated with their connection.
     """
 
-    keyword = "language|lang"
+    keyword = "language|lang|lugha"
 
     def help(self):
         self.respond("To set your language, send LANGUAGE <CODE>")
