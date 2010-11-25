@@ -10,9 +10,7 @@ for dir in ["lib", "apps"]:
     sys.path.insert(0, path)
 sys.path.insert(0, project_root)
 
-#DEFAULT_RESPONSE = "Sorry, I couldn't understand your message.  Try 'help' for assistance"
-DEFAULT_RESPONSE = "Samahani, sijaelewa ujumbe wako. Tafadhali tuma 'msaada' kwa maelezo zaidi"
-                    
+DEFAULT_RESPONSE = "Sorry, I couldn't understand your message.  Try 'help' for assistance"                    
 
 TIME_ZONE = "Africa/Dar_es_Salaam"
 

@@ -4,10 +4,10 @@
 
 from rapidsms.conf import settings
 from rapidsms.apps.base import AppBase
-
+from django.utils.translation import ugettext as _
 
 class App(AppBase):
     def default(self, msg):
         if settings.DEFAULT_RESPONSE is not None:
-            msg.error(settings.DEFAULT_RESPONSE,
+            msg.error(_(settings.DEFAULT_RESPONSE),
                 project_name=settings.PROJECT_NAME)
