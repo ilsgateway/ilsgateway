@@ -10,6 +10,12 @@ for dir in ["lib", "apps"]:
     sys.path.insert(0, path)
 sys.path.insert(0, project_root)
 
+ADMINS = (('Ryan', 'rhartford@dimagi.com'))
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER  = "ilsgateway@gmail.com"
+EMAIL_HOST_PASSWORD = "1lsgat3way"
+SERVER_EMAIL = "ilsgateway@gmail.com" 
+
 DEFAULT_RESPONSE = "Sorry, I couldn't understand your message.  Try 'help' for assistance"                    
 
 TIME_ZONE = "Africa/Dar_es_Salaam"

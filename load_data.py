@@ -171,8 +171,8 @@ def LoadSchedules():
             e = EventSchedule(callback=callback, 
                               description=callback, 
                               days_of_month='*',
-                              hours=set([12]), 
-                              minutes=set([1]))
+                              hours='*', 
+                              minutes=[0,15,30,45])
             e.save()
             count = count + 1
     print "Loaded %d EventSchedules" % count
