@@ -16,9 +16,14 @@ EMAIL_HOST_USER  = "ilsgateway@gmail.com"
 EMAIL_HOST_PASSWORD = "1lsgat3way"
 SERVER_EMAIL = "ilsgateway@gmail.com" 
 
+MONTHS_OF_STOCK_MIN=3
+MONTHS_OF_STOCK_MAX=7
+
 DEFAULT_RESPONSE = "Sorry, I couldn't understand your message.  Try 'help' for assistance"                    
 
 TIME_ZONE = "Africa/Dar_es_Salaam"
+
+ROUTER_MODE="TEST"
 
 PROJECT_NAME = "ILSGateway"
 DEBUG = True

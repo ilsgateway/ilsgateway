@@ -8,6 +8,8 @@ from urllib import urlencode
 from urllib2 import urlopen
 from elementtree import ElementTree as ET
 import urllib2
+from rapidsms.conf import settings
+import logging
 
 class Push(RapidHttpBacked):
     """ A RapidSMS backend for PUSH SMS
@@ -123,9 +125,16 @@ class Push(RapidHttpBacked):
         req = urllib2.Request(url=url, 
                               data=ET.tostring(root), 
                               headers={'Content-Type': 'application/xml'})
-        try:
-            handle = urllib2.urlopen(req)
-        except e:
-            print e   
-        print  HttpResponse(handle.read())
-        return HttpResponse(handle.read())
+        
+        if settings.ROUTER_MODE == 'PRODUCTION':
+            logging.debug("PRODUCTION MODE")
+            return ""
+#            try:
+#                handle = urllib2.urlopen(req)
+#            except e:
+#                print e   
+#            print  HttpResponse(handle.read())
+#            return HttpResponse(handle.read())
+        elif settings.ROUTER_MODE == 'TEST':
+            logging.debug("TEST MODE")
+            return ""

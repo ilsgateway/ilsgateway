@@ -3,7 +3,7 @@
 def LoadRegions(in_file):
     print "Loading Regions from %s" % (in_file)
     
-    f = open(in_file, 'r' )
+    f = open(in_file, 'rU' )
     reader = csv.reader( f )
     
     header_row = []
@@ -19,6 +19,7 @@ def LoadRegions(in_file):
         if not header_row:
             header_row = row
             continue
+        pk = row[0]
         region_name = row[1]
         if region_name == 0:
             continue
@@ -27,14 +28,18 @@ def LoadRegions(in_file):
         if existing_sdp:
             skipped = skipped + 1
             continue
-                
-        longitude = row[2] 
-        latitude = row[3]
+            
+        latitude = 0
+        longitude = 0        
+        if len(row) > 2:
+            longitude = row[2] 
+        if len(row) > 3:
+            latitude = row[3]
         p = None
         if longitude and longitude != '0' and latitude and latitude != '0':
             p = Point(latitude=latitude, longitude=longitude)
             p.save()
-        sdp = Region(point=p, name=row[1], parent_type=ContentType.objects.get_for_model(MinistryOfHealth), parent_id = top_level_sdp.id, service_delivery_point_type_id=2)
+        sdp = Region(pk=pk, point=p, name=row[1], parent_type=ContentType.objects.get_for_model(MinistryOfHealth), parent_id = top_level_sdp.id, service_delivery_point_type_id=2)
         sdp.save()
         print sdp
         count = count + 1
@@ -44,7 +49,7 @@ def LoadRegions(in_file):
 def LoadDistricts(in_file):
     print "Loading Districts from %s" % (in_file)
     
-    f = open(in_file, 'r' )
+    f = open(in_file, 'rU' )
     reader = csv.reader( f )
     
     header_row = []
@@ -57,7 +62,7 @@ def LoadDistricts(in_file):
         if not header_row:
             header_row = row
             continue
-        district_name = row[1].upper()
+        district_name = row[2].upper()
         if not district_name or district_name == 0:
             continue
 
@@ -67,7 +72,7 @@ def LoadDistricts(in_file):
             continue
         
         sdp = District()
-        parent_name = row[0].upper()
+        parent_name = row[1].upper()
         parent_regions = ServiceDeliveryPoint.objects.filter(name=parent_name)
         if not parent_regions:
             print "Invalid Region Name: %s" % parent_name
@@ -76,10 +81,10 @@ def LoadDistricts(in_file):
             
         sdp.parent_id = parent_regions[0].id  
         sdp.parent_type = ContentType.objects.get_for_model(Region)
-         
+        sdp.pk = row[0] 
         sdp.name = district_name
-        longitude = row[3] 
-        latitude = row[4]
+        longitude = row[4] 
+        latitude = row[5]
         p = None
         if longitude and longitude != '0' and latitude and latitude != '0':
             p = Point(latitude=latitude, longitude=longitude)
@@ -95,7 +100,7 @@ def LoadDistricts(in_file):
 def LoadFacilities(in_file):
     print "Loading Facilities from %s" % (in_file)
     
-    f = open(in_file, 'r' )
+    f = open(in_file, 'rU' )
     reader = csv.reader( f )
     
     header_row = []
@@ -107,11 +112,11 @@ def LoadFacilities(in_file):
         if not header_row:
             header_row = row
             continue
-        facility_name = row[2].upper()
+        facility_name = row[4].upper()
         if not facility_name or facility_name == 0:
             continue
 
-        parent_name = row[1].upper()
+        parent_name = row[3].upper()
         parent_districts = District.objects.filter(name=parent_name)
         if not parent_districts:
             print "Invalid District Name: %s" % parent_name
@@ -119,7 +124,7 @@ def LoadFacilities(in_file):
             print row
             sys.exit(1)
 
-        msd_code = row[0].upper()
+        msd_code = row[1].upper()
         if not re.match('D\d+', msd_code):
             print "Invalid MSD code format: %s" % msd_code
             sys.exit(1)
@@ -130,20 +135,27 @@ def LoadFacilities(in_file):
             skipped = skipped + 1
             continue
         
-        sdp = Facility()    
+        sdp = Facility() 
+        sdp.pk = row[0]   
         sdp.parent_id = parent_districts[0].id
         sdp.parent_type = ContentType.objects.get_for_model(District)
             
         sdp.name = facility_name         
-        sdp.msd_code = row[0]
-        delivery_group_name = row[3].upper()
+        sdp.msd_code = row[1]
+        delivery_group_name = row[5].upper()
         delivery_groups = DeliveryGroup.objects.filter(name__iexact=delivery_group_name)
         if not delivery_groups:
             print "Invalid Delivery Group: %s" % delivery_group_name
 
         sdp.delivery_group = delivery_groups[0]
-        longitude = row[4] 
-        latitude = row[5]
+        
+        longitude = 0
+        latitude = 0
+        if len(row) > 6:
+            longitude = row[6] 
+        if len(row) > 7:
+            latitude = row[7]
+        
         p = None
         if longitude and longitude != '0' and latitude and latitude != '0':
             p = Point(latitude=latitude, longitude=longitude)
@@ -160,12 +172,12 @@ def LoadFacilities(in_file):
 
 def LoadSchedules():
     count = 0
-    callbacks = ['ilsgateway.callbacks.facility_randr_reminder', 
-                 'ilsgateway.callbacks.district_randr_reminder', 
-                 'ilsgateway.callbacks.facility_delivery_reminder', 
-                 'ilsgateway.callbacks.district_delivery_reminder', 
-                 'ilsgateway.callbacks.district_delinquent_deliveries_summary',
-                 'ilsgateway.callbacks.facility_soh_reminder',]    
+    callbacks = ['ilsgateway.callbacks.run_reminders'] 
+#                 'ilsgateway.callbacks.district_randr_reminder', 
+#                 'ilsgateway.callbacks.facility_delivery_reminder', 
+#                 'ilsgateway.callbacks.district_delivery_reminder', 
+#                 'ilsgateway.callbacks.district_delinquent_deliveries_summary',
+#                 'ilsgateway.callbacks.facility_soh_reminder',]    
     for callback in callbacks: 
         if not EventSchedule.objects.filter(callback=callback):
             e = EventSchedule(callback=callback, 
