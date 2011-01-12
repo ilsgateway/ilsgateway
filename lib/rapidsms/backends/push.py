@@ -128,13 +128,12 @@ class Push(RapidHttpBacked):
         
         if settings.ROUTER_MODE == 'PRODUCTION':
             logging.debug("PRODUCTION MODE")
-            return ""
-#            try:
-#                handle = urllib2.urlopen(req)
-#            except e:
-#                print e   
-#            print  HttpResponse(handle.read())
-#            return HttpResponse(handle.read())
+            try:
+                handle = urllib2.urlopen(req)
+            except e:
+                print e   
+            print  HttpResponse(handle.read())
+            return HttpResponse(handle.read())
         elif settings.ROUTER_MODE == 'TEST':
             logging.debug("TEST MODE")
             return ""
