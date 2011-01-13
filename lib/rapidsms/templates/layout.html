@@ -62,7 +62,8 @@
 					<li class="app-{{ tab.name }}{% if tab.is_active %} active{% endif %}">
 						<a href="{{ tab.url }}"><span>{% trans tab.caption %}</span></a>
 					</li>{% endfor %}
-				{% if user.id == 2 %}
+				{% if user.is_staff %}
+					<li><a href="/stockinquiry">{% trans 'Stock Inquiry' %}</a></li>
 					<li><a href="{% url rapidsms.contrib.httptester.views.generate_identity %}">{% trans 'Message Tester' %}</a></li>
 				{% endif %}
 				</ul>
