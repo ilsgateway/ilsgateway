@@ -80,9 +80,9 @@ class Push(RapidHttpBacked):
         </methodCall>    
         """
         url = "https://dragon.operatelecom.com:1089/Gateway"
-        password = "p487fhem"
-        channel = "9840"
-        service = "124524"
+        password = "ilsck7za"
+        channel = "24358"
+        service = "127405"        
         numbers = message.connection.identity
         text = message.text
         
