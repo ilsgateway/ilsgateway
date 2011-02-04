@@ -10,23 +10,14 @@ for dir in ["lib", "apps"]:
     sys.path.insert(0, path)
 sys.path.insert(0, project_root)
 
-ADMINS = (('Ryan', 'rhartford@dimagi.com'))
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER  = "ilsgateway@gmail.com"
-EMAIL_HOST_PASSWORD = "1lsgat3way"
-SERVER_EMAIL = "ilsgateway@gmail.com" 
-
-MONTHS_OF_STOCK_MIN=3
-MONTHS_OF_STOCK_MAX=7
+# import local settings if we find them
+try:
+    from localsettings import *
+except ImportError:
+    pass
 
 DEFAULT_RESPONSE = "Sorry, I couldn't understand your message.  Try 'help' for assistance"                    
 
-TIME_ZONE = "Africa/Dar_es_Salaam"
-
-ROUTER_MODE="TEST"
-
-PROJECT_NAME = "ILSGateway"
-DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 TEMPLATE_DIRS = (
     os.path.join(project_root, 'apps', 'ilsgateway', 'templates')
@@ -37,8 +28,6 @@ MESSAGE_TESTER_TIMEOUT  = 5
 MESSAGE_TESTER_INTERVAL = 0.2
 
 AJAX_PROXY_HOST = "localhost"
-#dev setting
-#AJAX_PROXY_PORT = 8002
 AJAX_PROXY_PORT = 8001
 
 INSTALLED_HANDLERS = None
@@ -47,41 +36,17 @@ EXCLUDED_HANDLERS = ['what']
 PAGINATOR_OBJECTS_PER_PAGE = 12
 PAGINATOR_MAX_PAGE_LINKS = 5
 
-MAP_DEFAULT_LATITUDE  = '-10.275059'
-MAP_DEFAULT_LONGITUDE = '40.183868'
-
 MIDDLEWARE_CLASSES = (
    'django.contrib.sessions.middleware.SessionMiddleware',
    'django.middleware.locale.LocaleMiddleware',
    'django.contrib.auth.middleware.AuthenticationMiddleware',    
    'django.middleware.common.CommonMiddleware',
 )
-LANGUAGES = (
-  ('sw', _('Swahili')),
-  ('en', _('English')),
-)
-
-LANGUAGE_CODE = 'sw'
 
 USE_L10N = True
 USE_I18N = True
 
-DEFAULT_BACKEND = 'push_backend'
-
 FORMAT_MODULE_PATH = 'ilsgateway.formats'
-
-DATABASES = {
-    'default': {
-        'ENGINE':   'django.db.backends.postgresql_psycopg2',    # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-# dev setting
-#        'NAME':     'ilsgateway_dev',                                # Or path to database file if using sqlite3.
-        'NAME':     'ilsgateway',                                # Or path to database file if using sqlite3.
-        'USER':     'postgres',                                  # Not used with sqlite3.
-        'PASSWORD': 'qsczse',                                    # Not used with sqlite3.
-        'HOST':     '',                                          # Set to empty string for localhost. Not used with sqlite3.
-        'PORT':     '',                                          # Set to empty string for default. Not used with sqlite3.
-    }
-}
 
 # to get up and running quickly with a minimal rapidsms project, start
 # with these apps. just prepend them to your INSTALLED_APPS.
@@ -152,8 +117,6 @@ INSTALLED_BACKENDS = {
         "ENGINE": "rapidsms.backends.bucket"
     },
     "push_backend" : {"ENGINE":  "rapidsms.backends.push", 
-#dev setting
-#        "port": 8880, 
         "port": 8888,
 	"host": "0.0.0.0",
         "gateway_url": "http://www.smsgateway.com",
@@ -161,8 +124,6 @@ INSTALLED_BACKENDS = {
         "params_incoming": "id=%(phone_number)s&text=%(message)s"
     }
 }
-
-
 
 """
 The following default settings are sufficient for most RapidSMS development
@@ -218,11 +179,9 @@ TEST_DATABASE_NAME = os.path.join(tempfile.gettempdir(), "rapidsms.test.sqlite3"
 
 # the default log settings are very noisy.
 LOG_LEVEL   = "DEBUG"
-#dev setting
-#LOG_FILE    = "/tmp/rapidsms_dev.log"
 LOG_FILE    = "/tmp/rapidsms.log"
 LOG_FORMAT  = "[%(name)s]: %(message)s"
-LOG_SIZE    = 8192 # 8192 bytes = 64 kb
+LOG_SIZE    = 10485760 # 8192 bytes = 64 kb
 LOG_BACKUPS = 256 # number of logs to keep
 
 
