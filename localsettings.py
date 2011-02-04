@@ -1,3 +1,4 @@
+_ = lambda s: s
 PROJECT_NAME = "ILSGateway"
 
 DEFAULT_BACKEND = 'push_backend'
