@@ -79,10 +79,11 @@ class Push(RapidHttpBacked):
             </params>
         </methodCall>    
         """
-        url = "https://dragon.operatelecom.com:1089/Gateway"
-        password = "ilsck7za"
-        channel = "24358"
-        service = "127405"        
+    	url = settings.PUSH_URL
+    	password = settings.PUSH_PASSWORD
+    	channel = settings.PUSH_CHANNEL
+    	service = settings.PUSH_SERVICE
+
         numbers = message.connection.identity
         text = message.text
         
@@ -125,15 +126,12 @@ class Push(RapidHttpBacked):
         req = urllib2.Request(url=url, 
                               data=ET.tostring(root), 
                               headers={'Content-Type': 'application/xml'})
-        
         if settings.ROUTER_MODE == 'PRODUCTION':
             logging.debug("PRODUCTION MODE")
             try:
                 handle = urllib2.urlopen(req)
             except e:
                 print e   
-            print  HttpResponse(handle.read())
             return HttpResponse(handle.read())
         elif settings.ROUTER_MODE == 'TEST':
-            logging.debug("TEST MODE")
             return ""
