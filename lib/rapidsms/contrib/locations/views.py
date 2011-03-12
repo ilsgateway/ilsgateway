@@ -14,7 +14,7 @@ from .models import *
 from .tables import *
 from . import utils
 from ilsgateway.models import Facility, District, Region, MinistryOfHealth, ServiceDeliveryPoint, Product
-
+from django.contrib.auth.decorators import login_required
 
 def _breadcrumbs(location=None, first_caption="TANZANIA"):
     """
@@ -86,7 +86,7 @@ class LocationTypeStub(object):
     def is_empty(self):
         return self.locations().count() == 0
 
-
+@login_required
 def locations(req, location_uid=None):
     language = ''
     if req.LANGUAGE_CODE == 'en':
