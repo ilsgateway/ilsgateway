@@ -26,7 +26,7 @@
 	};
 	
 	function hasData(loc) {
-	    return loc.attr("last_reported") != "Waiting for reply" && loc.attr("last_reported") != "No reminder sent";  
+	    return {% for product in products %}loc.attr('{{ product.sms_code }}_soh') != 'No data' {% if not forloop.last %}||{% endif %}{% endfor %};
 	};
 	
 	jQuery(function() {
